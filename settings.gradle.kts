@@ -23,3 +23,5 @@ rootProject.name = "Books"
 include(":app")
 include(":core:implementation")
 include(":core:api")
+include(":data:network:api")
+include(":data:network:implementation")

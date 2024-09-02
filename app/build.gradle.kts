@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(project(":core:implementation"))
+    implementation(project(":data:network:implementation"))
 
     // Dagger
     implementation(libs.bundles.dagger)
