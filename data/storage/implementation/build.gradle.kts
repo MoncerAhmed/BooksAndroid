@@ -14,7 +14,8 @@ android {
 
 dependencies {
     implementation(project(":core:api"))
-    implementation(project(":common"))
+    implementation(project(":common:android"))
+    implementation(project(":common:kotlin"))
     api(project(":data:storage:api"))
 
     // Dagger

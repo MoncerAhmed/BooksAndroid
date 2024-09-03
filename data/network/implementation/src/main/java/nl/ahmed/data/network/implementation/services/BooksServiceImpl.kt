@@ -7,8 +7,8 @@ import retrofit2.http.Path
 
 internal interface BooksServiceImpl : BooksService {
     @GET("Books")
-    override suspend fun getBooks(): List<BookDto>
+    override suspend fun getAll(): List<BookDto>
 
     @GET("Books/{id}")
-    override suspend fun getBook(@Path("id") id: BookDto.Id): BookDto
+    override suspend fun get(@Path("id") id: String): BookDto
 }

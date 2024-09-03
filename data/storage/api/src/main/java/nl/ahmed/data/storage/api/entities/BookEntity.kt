@@ -1,9 +1,10 @@
 package nl.ahmed.data.storage.api.entities
 
 import java.time.ZonedDateTime
+import nl.ahmed.common.kotlin.templates.Model
 
-interface BookEntity {
-    val id: Id
+interface BookEntity : Model.Entity {
+    override val id: Id
     val createdAt: ZonedDateTime
     val author: String
     val coverUrl: String
@@ -24,7 +25,7 @@ interface BookEntity {
     ): BookEntity
 
     @JvmInline
-    value class Id(val value: String)
+    value class Id(override val value: String) : Model.Entity.Id
 
     interface Factory {
         fun create(

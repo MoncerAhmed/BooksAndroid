@@ -11,6 +11,7 @@ android {
 dependencies {
     api(project(":data:network:api"))
     implementation(project(":core:api"))
+    implementation(project(":common:kotlin"))
 
     // Retrofit
     implementation(libs.networking.retrofit)

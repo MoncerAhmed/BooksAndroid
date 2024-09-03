@@ -1,6 +1,7 @@
 package nl.ahmed.data.network.api.dtos
 
 import java.time.ZonedDateTime
+import nl.ahmed.common.kotlin.templates.Model
 
 data class BookDto(
     val id: Id,
@@ -11,7 +12,7 @@ data class BookDto(
     val reads: Int,
     val reviews: Int,
     val summary: String
-) {
+) : Model.Dto {
     @JvmInline
     value class Id(val value: String)
 }

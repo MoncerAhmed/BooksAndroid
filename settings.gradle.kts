@@ -21,10 +21,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "Books"
 include(":app")
-include(":common")
+include(":common:android")
 include(":core:api")
 include(":core:implementation")
 include(":data:network:api")
 include(":data:network:implementation")
 include(":data:storage:api")
 include(":data:storage:implementation")
+include(":common:kotlin")

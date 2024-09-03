@@ -9,5 +9,13 @@ java {
 }
 
 dependencies {
-    implementation(project(":common:kotlin"))
+    implementation(libs.inject)
+
+    testImplementation(kotlin("test"))
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.kotlinx.coroutines)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

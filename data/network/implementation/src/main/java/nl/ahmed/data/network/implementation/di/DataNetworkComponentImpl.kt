@@ -6,7 +6,10 @@ import nl.ahmed.core.api.di.CoreComponent
 import nl.ahmed.data.network.api.di.DataNetworkComponent
 
 @Singleton
-@Component(dependencies = [CoreComponent::class], modules = [DataNetworkModule::class])
+@Component(
+    dependencies = [CoreComponent::class],
+    modules = [BooksServiceModule::class]
+)
 interface DataNetworkComponentImpl : DataNetworkComponent {
 
     @Component.Builder

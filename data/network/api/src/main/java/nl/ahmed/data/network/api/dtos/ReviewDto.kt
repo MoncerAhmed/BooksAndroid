@@ -1,6 +1,7 @@
 package nl.ahmed.data.network.api.dtos
 
 import java.time.ZonedDateTime
+import nl.ahmed.common.kotlin.templates.Model
 
 data class ReviewDto(
     val id: Id,
@@ -8,7 +9,7 @@ data class ReviewDto(
     val reviewerName: String,
     val reviewerImgUrl: String,
     val review: String
-) {
+) : Model.Dto {
     @JvmInline
     value class Id(val value: String)
 }

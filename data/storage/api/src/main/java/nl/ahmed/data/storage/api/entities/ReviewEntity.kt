@@ -1,9 +1,10 @@
 package nl.ahmed.data.storage.api.entities
 
 import java.time.ZonedDateTime
+import nl.ahmed.common.kotlin.templates.Model
 
-interface ReviewEntity {
-    val id: Id
+interface ReviewEntity : Model.Entity {
+    override val id: Id
     val createdAt: ZonedDateTime
     val reviewerName: String
     val reviewerImgUrl: String
@@ -18,7 +19,7 @@ interface ReviewEntity {
     ): ReviewEntity
 
     @JvmInline
-    value class Id(val value: String)
+    value class Id(override val value: String) : Model.Entity.Id
 
     interface Factory {
         fun create(
