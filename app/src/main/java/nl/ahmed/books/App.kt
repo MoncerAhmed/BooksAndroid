@@ -8,6 +8,7 @@ import nl.ahmed.books.di.AppComponent
 import nl.ahmed.books.di.DaggerAppComponent
 import nl.ahmed.common.kotlin.operation.CashedFetchOperationExecutor
 import nl.ahmed.core.api.di.CoreComponent
+import nl.ahmed.common.kotlin.utils.Logger
 import nl.ahmed.core.di.DaggerCoreComponentImpl
 import nl.ahmed.data.network.api.dtos.BookDto
 import nl.ahmed.data.network.api.services.BooksService
@@ -22,6 +23,9 @@ internal class App : Application() {
 
     @Inject
     lateinit var booksService: BooksService
+
+    @Inject
+    lateinit var logger: Logger
 
     private lateinit var appComponent: AppComponent
 
@@ -57,7 +61,7 @@ internal class App : Application() {
                 booksService.getAll()
             }
 
-            println("This is from the app $books")
+            logger.logError("This is from the app $books")
         }
     }
 }

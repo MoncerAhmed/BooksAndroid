@@ -9,4 +9,6 @@ android {
 
 dependencies {
     api(libs.networking.retrofit)
+
+    implementation(project(":common:kotlin"))
 }

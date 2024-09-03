@@ -1,4 +1,4 @@
-package nl.ahmed.common.kotlin.operation
+package nl.ahmed.common.kotlin.operation.models
 
 data class OperationException(
     val causes: List<Throwable>

@@ -1,21 +1,25 @@
 package nl.ahmed.common.kotlin.operation
 
 import javax.inject.Inject
-import nl.ahmed.common.kotlin.Mapper
+import nl.ahmed.common.kotlin.templates.Mapper
+import nl.ahmed.common.kotlin.operation.models.OperationException
+import nl.ahmed.common.kotlin.operation.models.OperationResult
 import nl.ahmed.common.kotlin.templates.Dao
 import nl.ahmed.common.kotlin.templates.Model
+import nl.ahmed.common.kotlin.utils.Logger
 
-class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D : Model.Domain> @Inject constructor(
+class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.Domain> @Inject constructor(
     private val insertDao: Dao.Insert<E>,
     private val queryDao: Dao.Query<E>,
     private val deleteDao: Dao.Delete<E>,
     private val dtoToEntityMapper: Mapper<List<DTO>, List<E>>,
     private val entityToDomainMapper: Mapper<List<E>, List<D>>,
+    private val logger: Logger
 ) {
 
     suspend fun execute(
         apiOperation: suspend () -> List<DTO>
-    ): List<D> {
+    ): OperationResult<List<D>> {
         try {
             val apiData = apiOperation()
             var storageData = dtoToEntityMapper(apiData)
@@ -31,25 +35,35 @@ class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D : Model.
             } catch (storageThrowable: Throwable) {
                 // If inserting of querying the data in/from local storage didn't succeed
                 // no need to fail the entire operation since we still have the API data
-                // TODO: Log error
+                logger.logError(
+                    throwable = storageThrowable,
+                    message = "Error update local storage"
+                )
             }
-            return entityToDomainMapper(storageData)
+            return OperationResult.Success(data = entityToDomainMapper(storageData))
         } catch (apiThrowable: Throwable) {
-            // TODO: Log error
+            logger.logError(
+                throwable = apiThrowable,
+                message = "Error fetching data from API"
+            )
             // Try to fetch local storage
             try {
                 val storageData = queryDao.getAll()
-                return entityToDomainMapper(storageData)
+                return OperationResult.Success(data = entityToDomainMapper(storageData))
             } catch (storageThrowable: Throwable) {
-                // In case of storage query failure we can't get the data from any source
-                // then log the error and throw the exception
-                // TODO: Log error
-                throw OperationException(
+                val operationThrowable = OperationException(
                     causes = listOf(
                         apiThrowable,
                         storageThrowable
                     )
                 )
+                logger.logError(
+                    throwable = operationThrowable,
+                    message = "Failed to fetch data from API and local storage"
+                )
+                // In case of storage query failure we can't get the data from any source
+                // then log the error and return a failure
+                return OperationResult.Failure(throwable = operationThrowable)
             }
         }
     }

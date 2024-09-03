@@ -11,6 +11,7 @@ android {
 dependencies {
     api(project(":core:api"))
     implementation(project(":common:android"))
+    implementation(project(":common:kotlin"))
 
     // Dagger
     implementation(libs.bundles.dagger)
@@ -19,6 +20,9 @@ dependencies {
     // Networking
     implementation(libs.networking.retrofit.gson)
     implementation(libs.networking.okhttp3.logginginterceptor)
+
+    // Logging
+    implementation(libs.timber)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

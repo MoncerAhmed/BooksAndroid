@@ -11,7 +11,7 @@ java {
 dependencies {
     implementation(libs.inject)
 
-    testImplementation(kotlin("test"))
+    testImplementation(libs.junit)
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.kotlinx.coroutines)
 }

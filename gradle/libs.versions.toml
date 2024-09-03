@@ -20,6 +20,7 @@ jetbrainsKotlinJvm = "1.9.0"
 inject = "1"
 mockk = "1.13.12"
 kotlinXCoroutinesTest = "1.9.0-RC.2"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,9 @@ networking-okhttp3-logginginterceptor = { module = "com.squareup.okhttp3:logging
 data-room = { module = "androidx.room:room-runtime", version.ref = "roon" }
 data-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roon" }
 data-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roon" }
+
+# Logging
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # Testing
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
