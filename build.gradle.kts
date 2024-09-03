@@ -16,7 +16,7 @@ allprojects {
                 compileSdkVersion(34)
 
                 defaultConfig {
-                    minSdk = 29
+                    minSdk = 31
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     consumerProguardFiles("consumer-rules.pro")
                 }

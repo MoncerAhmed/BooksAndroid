@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "nl.ahmed.books"
-        minSdk = 29
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -46,6 +46,7 @@ dependencies {
     ksp(libs.bundles.dagger.ksp)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
