@@ -4,9 +4,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import javax.inject.Named
-import nl.ahmed.core.adapters.LocalDateTimeAdapter
+import nl.ahmed.common.android.converters.retrofit.LocalDateTimeAdapter
 import nl.ahmed.core.di.CoreScope
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,7 +20,10 @@ internal class NetworkingModule {
     @CoreScope
     @Provides
     fun providesGson(): Gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter)
+        .registerTypeAdapter(
+            ZonedDateTime::class.java,
+            LocalDateTimeAdapter
+        )
         .create()
 
     @CoreScope

@@ -10,6 +10,7 @@ android {
 
 dependencies {
     api(project(":core:api"))
+    implementation(project(":common"))
 
     // Dagger
     implementation(libs.bundles.dagger)

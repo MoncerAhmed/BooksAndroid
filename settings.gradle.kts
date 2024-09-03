@@ -21,7 +21,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "Books"
 include(":app")
-include(":core:implementation")
+include(":common")
 include(":core:api")
+include(":core:implementation")
 include(":data:network:api")
 include(":data:network:implementation")
+include(":data:storage:api")
+include(":data:storage:implementation")

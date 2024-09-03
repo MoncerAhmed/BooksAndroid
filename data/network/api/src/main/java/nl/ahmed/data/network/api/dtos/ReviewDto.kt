@@ -1,12 +1,12 @@
 package nl.ahmed.data.network.api.dtos
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class ReviewDto(
     val id: Id,
-    val createdAt: LocalDateTime,
-    val readerName: String,
-    val readerImgUrl: String,
+    val createdAt: ZonedDateTime,
+    val reviewerName: String,
+    val reviewerImgUrl: String,
     val review: String
 ) {
     @JvmInline

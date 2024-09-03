@@ -1,14 +1,14 @@
 package nl.ahmed.data.network.api.dtos
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class BookDto(
     val id: Id,
-    val createdAt: LocalDateTime,
+    val createdAt: ZonedDateTime,
     val author: String,
     val coverUrl: String,
     val description: String,
-    val read: Int,
+    val reads: Int,
     val reviews: Int,
     val summary: String
 ) {
