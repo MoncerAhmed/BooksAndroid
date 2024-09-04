@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -17,6 +18,12 @@ android {
 
 dependencies {
     implementation(project(":designsystem"))
+    implementation(project(":core:api"))
+    implementation(project(":navigation"))
+
+    // Dagger
+    implementation(libs.bundles.dagger)
+    kapt(libs.bundles.dagger.kapt)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

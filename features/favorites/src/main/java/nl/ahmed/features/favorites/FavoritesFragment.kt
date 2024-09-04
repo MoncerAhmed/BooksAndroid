@@ -12,9 +12,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import dagger.android.support.DaggerFragment
 import nl.ahmed.designsystem.theme.BooksTheme
 
-class FavoritesFragment : Fragment() {
+internal class FavoritesFragment : DaggerFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
+import javax.inject.Provider
 import nl.ahmed.books.R
 import nl.ahmed.books.databinding.ActivityMainBinding
+import nl.ahmed.navigation.AppNavigator
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var appNavigator: Provider<AppNavigator>
+
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
@@ -22,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
         setupBottomNavigationBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        println("This is from the activity: ${appNavigator.get()}")
     }
 
     private fun setupSplashScreenDuration() {

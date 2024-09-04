@@ -12,9 +12,16 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
+import javax.inject.Provider
 import nl.ahmed.designsystem.theme.BooksTheme
+import nl.ahmed.navigation.AppNavigator
 
-class HomeFragment : Fragment() {
+internal class HomeFragment : DaggerFragment() {
+    @Inject
+    lateinit var appNavigator: Provider<AppNavigator>
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

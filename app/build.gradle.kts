@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -38,13 +38,14 @@ dependencies {
     implementation(project(":data:network:implementation"))
     implementation(project(":data:dal:implementation"))
     implementation(project(":common:kotlin"))
+    implementation(project(":navigation"))
 
     implementation(project(":features:home"))
     implementation(project(":features:favorites"))
 
     // Dagger
     implementation(libs.bundles.dagger)
-    ksp(libs.bundles.dagger.ksp)
+    kapt(libs.bundles.dagger.kapt)
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)

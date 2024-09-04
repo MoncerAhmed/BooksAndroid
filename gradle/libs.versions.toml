@@ -75,10 +75,11 @@ test-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
 dagger = ["dagger-dagger", "dagger-androidSupport"]
-dagger-ksp = ["dagger-compiler", "dagger-androidProcessor"]
+dagger-kapt = ["dagger-compiler", "dagger-androidProcessor"]
 

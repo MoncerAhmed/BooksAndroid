@@ -1,12 +1,13 @@
 package nl.ahmed.books.di
 
 import dagger.Component
+import dagger.android.AndroidInjectionModule
+import dagger.android.AndroidInjector
 import nl.ahmed.books.App
 import nl.ahmed.core.api.di.CoreComponent
-import nl.ahmed.core.di.AppScope
+import nl.ahmed.core.api.di.AppScope
 import nl.ahmed.data.dal.di.DataDalComponent
-import nl.ahmed.data.network.api.di.DataNetworkComponent
-import nl.ahmed.data.storage.api.di.DataStorageComponent
+import nl.ahmed.feature.home.HomeModule
 
 @AppScope
 @Component(
@@ -14,19 +15,17 @@ import nl.ahmed.data.storage.api.di.DataStorageComponent
         CoreComponent::class,
         DataDalComponent::class,
     ],
-    modules = [AppModule::class]
+    modules = [
+        AndroidInjectionModule::class,
+        AppModule::class,
+        MainActivityModule::class
+    ]
 )
-internal interface AppComponent {
-
-    fun inject(app: App)
+internal interface AppComponent : AndroidInjector<App>{
 
     @Component.Builder
     interface Builder {
         fun withCoreComponent(coreComponent: CoreComponent): Builder
-
-        /*fun withDataNetworkComponent(dataNetworkComponent: DataNetworkComponent): Builder
-
-        fun withDataStorageComponent(dataStorageComponent: DataStorageComponent): Builder*/
 
         fun withDataDalComponent(dataDalComponent: DataDalComponent): Builder
 

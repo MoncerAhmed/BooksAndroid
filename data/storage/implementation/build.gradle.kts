@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
 }
 
@@ -20,7 +21,7 @@ dependencies {
 
     // Dagger
     implementation(libs.bundles.dagger)
-    ksp(libs.bundles.dagger.ksp)
+    kapt(libs.bundles.dagger.kapt)
 
     // Room
     implementation(libs.data.room)
