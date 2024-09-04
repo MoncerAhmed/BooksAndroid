@@ -8,12 +8,12 @@ import nl.ahmed.common.kotlin.templates.Dao
 import nl.ahmed.common.kotlin.templates.Model
 import nl.ahmed.common.kotlin.utils.Logger
 
-class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.Domain> @Inject constructor(
+class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.Data> @Inject constructor(
     private val insertDao: Dao.Insert<E>,
     private val queryDao: Dao.Query<E>,
     private val deleteDao: Dao.Delete<E>,
     private val dtoToEntityMapper: Mapper<List<DTO>, List<E>>,
-    private val entityToDomainMapper: Mapper<List<E>, List<D>>,
+    private val entityToDataMapper: Mapper<List<E>, List<D>>,
     private val logger: Logger
 ) {
 
@@ -40,7 +40,7 @@ class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.D
                     message = "Error update local storage"
                 )
             }
-            return OperationResult.Success(data = entityToDomainMapper(storageData))
+            return OperationResult.Success(data = entityToDataMapper(storageData))
         } catch (apiThrowable: Throwable) {
             logger.logError(
                 throwable = apiThrowable,
@@ -49,7 +49,7 @@ class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.D
             // Try to fetch local storage
             try {
                 val storageData = queryDao.getAll()
-                return OperationResult.Success(data = entityToDomainMapper(storageData))
+                return OperationResult.Success(data = entityToDataMapper(storageData))
             } catch (storageThrowable: Throwable) {
                 val operationThrowable = OperationException(
                     causes = listOf(

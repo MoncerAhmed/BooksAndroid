@@ -6,26 +6,21 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import nl.ahmed.books.di.AppComponent
 import nl.ahmed.books.di.DaggerAppComponent
-import nl.ahmed.common.kotlin.operation.CashedFetchOperationExecutor
-import nl.ahmed.core.api.di.CoreComponent
 import nl.ahmed.common.kotlin.utils.Logger
+import nl.ahmed.core.api.di.CoreComponent
 import nl.ahmed.core.di.DaggerCoreComponentImpl
-import nl.ahmed.data.network.api.dtos.BookDto
-import nl.ahmed.data.network.api.services.BooksService
+import nl.ahmed.dal.implementation.di.DaggerDataDalComponentImpl
+import nl.ahmed.data.dal.BooksRepository
 import nl.ahmed.data.network.implementation.di.DaggerDataNetworkComponentImpl
-import nl.ahmed.data.storage.api.entities.BookEntity
 import nl.ahmed.data.storage.implementation.di.DaggerDataStorageComponentImpl
 
 internal class App : Application() {
 
     @Inject
-    lateinit var operationExecutor: CashedFetchOperationExecutor<BookDto, BookEntity, Book>
-
-    @Inject
-    lateinit var booksService: BooksService
-
-    @Inject
     lateinit var logger: Logger
+
+    @Inject
+    lateinit var booksRepository: BooksRepository
 
     private lateinit var appComponent: AppComponent
 
@@ -48,18 +43,22 @@ internal class App : Application() {
             .withCoreComponent(coreComponent)
             .build()
 
+        val dataDalComponent = DaggerDataDalComponentImpl
+            .builder()
+            .withDataNetworkComponent(dataNetworkComponent)
+            .withDataStorageComponent(dataStorageComponent)
+            .withLoggerProvidingComponent(coreComponent)
+            .build()
+
         appComponent = DaggerAppComponent
             .builder()
             .withCoreComponent(coreComponent)
-            .withDataNetworkComponent(dataNetworkComponent)
-            .withDataStorageComponent(dataStorageComponent)
+            .withDataDalComponent(dataDalComponent)
             .build()
         appComponent.inject(this)
 
         MainScope().launch {
-            val books = operationExecutor.execute {
-                booksService.getAll()
-            }
+            val books = booksRepository.getBooks(keyword = "")
 
             logger.logError("This is from the app $books")
         }

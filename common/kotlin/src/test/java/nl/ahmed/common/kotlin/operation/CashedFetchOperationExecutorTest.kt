@@ -24,7 +24,7 @@ internal class CashedFetchOperationExecutorTest {
     private lateinit var dtoToEntityMapper: Mapper<List<Model.Dto>, List<Model.Entity>>
 
     @MockK
-    private lateinit var entityToDomainMapper: Mapper<List<Model.Entity>, List<Model.Domain>>
+    private lateinit var entityToDataMapper: Mapper<List<Model.Entity>, List<Model.Data>>
 
     @MockK
     private lateinit var insertDoa: Dao.Insert<Model.Entity>
@@ -38,7 +38,7 @@ internal class CashedFetchOperationExecutorTest {
     @MockK
     private lateinit var logger: Logger
 
-    private lateinit var cashedFetchOperationExecutor: CashedFetchOperationExecutor<Model.Dto, Model.Entity, Model.Domain>
+    private lateinit var cashedFetchOperationExecutor: CashedFetchOperationExecutor<Model.Dto, Model.Entity, Model.Data>
 
     @Before
     fun setup() {
@@ -48,7 +48,7 @@ internal class CashedFetchOperationExecutorTest {
             queryDao = queryDao,
             deleteDao = deleteDao,
             dtoToEntityMapper = dtoToEntityMapper,
-            entityToDomainMapper = entityToDomainMapper,
+            entityToDataMapper = entityToDataMapper,
             logger = logger
         )
 
@@ -85,8 +85,8 @@ internal class CashedFetchOperationExecutorTest {
             coEvery { apiOperation() } throws thrownExceptions
             coEvery { queryDao.getAll() } returns mockk()
 
-            val expectedData = mockk<List<Model.Domain>>()
-            every { entityToDomainMapper(any()) } returns expectedData
+            val expectedData = mockk<List<Model.Data>>()
+            every { entityToDataMapper(any()) } returns expectedData
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
@@ -101,7 +101,7 @@ internal class CashedFetchOperationExecutorTest {
             coVerify(exactly = 1) { queryDao.getAll() }
             coVerify(exactly = 0) { deleteDao.deleteAll() }
             coVerify(exactly = 0) { insertDoa.insert(any<List<Model.Entity>>()) }
-            coVerify(exactly = 1) { entityToDomainMapper(any()) }
+            coVerify(exactly = 1) { entityToDataMapper(any()) }
             verify(exactly = 1) { logger.logError(throwable = thrownExceptions, message = any()) }
 
         }
@@ -118,8 +118,8 @@ internal class CashedFetchOperationExecutorTest {
 
             every { dtoToEntityMapper(any()) } returns mockk()
 
-            val expectedData = mockk<List<Model.Domain>>()
-            every { entityToDomainMapper(any()) } returns expectedData
+            val expectedData = mockk<List<Model.Data>>()
+            every { entityToDataMapper(any()) } returns expectedData
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
@@ -134,7 +134,7 @@ internal class CashedFetchOperationExecutorTest {
             coVerify(exactly = 1) { queryDao.getAll() }
             coVerify(exactly = 1) { deleteDao.deleteAll() }
             coVerify(exactly = 1) { insertDoa.insert(any<List<Model.Entity>>()) }
-            coVerify(exactly = 1) { entityToDomainMapper(any()) }
+            coVerify(exactly = 1) { entityToDataMapper(any()) }
             coVerify(exactly = 1) { dtoToEntityMapper(any()) }
         }
 
@@ -150,8 +150,8 @@ internal class CashedFetchOperationExecutorTest {
 
             every { dtoToEntityMapper(any()) } returns mockk()
 
-            val expectedData = mockk<List<Model.Domain>>()
-            every { entityToDomainMapper(any()) } returns expectedData
+            val expectedData = mockk<List<Model.Data>>()
+            every { entityToDataMapper(any()) } returns expectedData
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
@@ -166,7 +166,7 @@ internal class CashedFetchOperationExecutorTest {
             coVerify(exactly = 1) { queryDao.getAll() }
             coVerify(exactly = 1) { deleteDao.deleteAll() }
             coVerify(exactly = 1) { insertDoa.insert(any<List<Model.Entity>>()) }
-            coVerify(exactly = 1) { entityToDomainMapper(any()) }
+            coVerify(exactly = 1) { entityToDataMapper(any()) }
             coVerify(exactly = 1) { dtoToEntityMapper(any()) }
         }
 
@@ -183,8 +183,8 @@ internal class CashedFetchOperationExecutorTest {
 
             every { dtoToEntityMapper(any()) } returns mockk()
 
-            val expectedData = mockk<List<Model.Domain>>()
-            every { entityToDomainMapper(any()) } returns expectedData
+            val expectedData = mockk<List<Model.Data>>()
+            every { entityToDataMapper(any()) } returns expectedData
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
@@ -199,7 +199,7 @@ internal class CashedFetchOperationExecutorTest {
             coVerify(exactly = 0) { queryDao.getAll() }
             coVerify(exactly = 1) { deleteDao.deleteAll() }
             coVerify(exactly = 0) { insertDoa.insert(any<List<Model.Entity>>()) }
-            coVerify(exactly = 1) { entityToDomainMapper(any()) }
+            coVerify(exactly = 1) { entityToDataMapper(any()) }
             coVerify(exactly = 1) { dtoToEntityMapper(any()) }
             verify(exactly = 1) { logger.logError(throwable = thrownException, message = any()) }
         }

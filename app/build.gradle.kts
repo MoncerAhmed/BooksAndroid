@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core:implementation"))
     implementation(project(":data:storage:implementation"))
     implementation(project(":data:network:implementation"))
+    implementation(project(":data:dal:implementation"))
     implementation(project(":common:kotlin"))
 
     // Dagger

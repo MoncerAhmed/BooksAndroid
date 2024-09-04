@@ -1,7 +1,7 @@
 package nl.ahmed.common.kotlin.templates
 
 sealed interface Model {
-    interface Domain : Model
+    interface Data : Model
     interface Dto : Model
     interface Entity : Model {
         val id: Id
