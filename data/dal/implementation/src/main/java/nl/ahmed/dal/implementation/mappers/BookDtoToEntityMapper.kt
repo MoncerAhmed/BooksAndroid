@@ -10,6 +10,7 @@ internal class BookDtoToEntityMapper @Inject constructor(
 ) : Mapper<BookDto, BookEntity> {
     override fun invoke(bookDto: BookDto): BookEntity  = bookEntityFactory.create(
         id = BookEntity.Id(bookDto.id.value),
+        title = bookDto.title,
         createdAt = bookDto.createdAt,
         author = bookDto.author,
         coverUrl = bookDto.coverUrl,

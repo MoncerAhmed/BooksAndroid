@@ -6,6 +6,7 @@ import nl.ahmed.common.kotlin.templates.Model
 data class BookDto(
     val id: Id,
     val createdAt: ZonedDateTime,
+    val title: String,
     val author: String,
     val coverUrl: String,
     val description: String,

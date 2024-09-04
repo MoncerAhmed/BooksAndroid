@@ -5,6 +5,7 @@ import nl.ahmed.common.kotlin.templates.Model
 
 interface BookEntity : Model.Entity {
     override val id: Id
+    val title: String
     val createdAt: ZonedDateTime
     val author: String
     val coverUrl: String
@@ -15,6 +16,7 @@ interface BookEntity : Model.Entity {
 
     fun copyEntity(
         id: Id = this.id,
+        title: String = this.title,
         createdAt: ZonedDateTime = this.createdAt,
         author: String = this.author,
         coverUrl: String = this.coverUrl,
@@ -30,6 +32,7 @@ interface BookEntity : Model.Entity {
     interface Factory {
         fun create(
             id: Id,
+            title: String,
             createdAt: ZonedDateTime,
             author: String,
             coverUrl: String,

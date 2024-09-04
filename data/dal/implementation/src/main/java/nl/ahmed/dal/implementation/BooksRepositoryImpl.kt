@@ -17,7 +17,7 @@ internal class BooksRepositoryImpl @Inject constructor(
         val result = operationExecutor.execute { booksService.getAll().toMutableList() }
         return when(result) {
             is OperationResult.Success -> {
-                val filteredBooks = result.data.filter { it.author.contains(keyword) || it.summary.contains(keyword) }
+                val filteredBooks = result.data.filter { it.author.contains(keyword) || it.title.contains(keyword) }
                 OperationResult.Success(filteredBooks)
             }
             is OperationResult.Failure -> result

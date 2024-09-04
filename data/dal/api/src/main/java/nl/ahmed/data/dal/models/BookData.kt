@@ -5,6 +5,7 @@ import nl.ahmed.common.kotlin.templates.Model
 
 data class BookData(
     val id: Id,
+    val title: String,
     val createdAt: ZonedDateTime,
     val author: String,
     val coverUrl: String,

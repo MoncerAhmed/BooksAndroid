@@ -8,6 +8,7 @@ import nl.ahmed.data.storage.api.entities.BookEntity
 @Entity(tableName = "books")
 internal data class BookEntityImpl(
     @PrimaryKey override val id: BookEntity.Id,
+    override val title: String,
     override val createdAt: ZonedDateTime,
     override val author: String,
     override val coverUrl: String,
@@ -19,6 +20,7 @@ internal data class BookEntityImpl(
 
     override fun copyEntity(
         id: BookEntity.Id,
+        title: String,
         createdAt: ZonedDateTime,
         author: String,
         coverUrl: String,
@@ -28,6 +30,7 @@ internal data class BookEntityImpl(
         summary: String
     ): BookEntity = copy(
         id = id,
+        title = title,
         createdAt = createdAt,
         author = author,
         coverUrl = coverUrl,
@@ -40,6 +43,7 @@ internal data class BookEntityImpl(
     class FactoryImpl : BookEntity.Factory {
         override fun create(
             id: BookEntity.Id,
+            title: String,
             createdAt: ZonedDateTime,
             author: String,
             coverUrl: String,
@@ -49,6 +53,7 @@ internal data class BookEntityImpl(
             summary: String
         ): BookEntity = BookEntityImpl(
             id = id,
+            title = title,
             createdAt = createdAt,
             author = author,
             coverUrl = coverUrl,

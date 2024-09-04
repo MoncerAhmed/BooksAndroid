@@ -8,6 +8,7 @@ import nl.ahmed.data.storage.api.entities.BookEntity
 internal class BookEntityToDataMapper @Inject constructor() : Mapper<BookEntity, BookData> {
     override fun invoke(bookEntity: BookEntity): BookData = BookData(
         id = BookData.Id(bookEntity.id.value),
+        title = bookEntity.title,
         createdAt = bookEntity.createdAt,
         author = bookEntity.author,
         coverUrl = bookEntity.coverUrl,
