@@ -9,9 +9,8 @@ import nl.ahmed.common.kotlin.templates.Model
 import nl.ahmed.common.kotlin.utils.Logger
 
 class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.Data> @Inject constructor(
-    private val insertDao: Dao.Insert<E>,
+    private val updateDao: Dao.Update<E>,
     private val queryDao: Dao.Query<E>,
-    private val deleteDao: Dao.Delete<E>,
     private val dtoToEntityMapper: Mapper<List<DTO>, List<E>>,
     private val entityToDataMapper: Mapper<List<E>, List<D>>,
     private val logger: Logger
@@ -24,11 +23,8 @@ class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.D
             val apiData = apiOperation()
             var storageData = dtoToEntityMapper(apiData)
             try {
-                // Delete all stored data
-                deleteDao.deleteAll()
-
-                // Insert new data
-                insertDao.insert(storageData)
+                // Insert/update new/old data
+                updateDao.updateAll(storageData)
 
                 // Always query locale storage (if possible) because it's the source of truth
                 storageData = queryDao.getAll()

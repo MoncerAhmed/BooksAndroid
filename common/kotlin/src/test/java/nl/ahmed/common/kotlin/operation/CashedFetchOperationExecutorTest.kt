@@ -27,13 +27,10 @@ internal class CashedFetchOperationExecutorTest {
     private lateinit var entityToDataMapper: Mapper<List<Model.Entity>, List<Model.Data>>
 
     @MockK
-    private lateinit var insertDoa: Dao.Insert<Model.Entity>
+    private lateinit var updateDao: Dao.Update<Model.Entity>
 
     @MockK
     private lateinit var queryDao: Dao.Query<Model.Entity>
-
-    @MockK
-    private lateinit var deleteDao: Dao.Delete<Model.Entity>
 
     @MockK
     private lateinit var logger: Logger
@@ -44,9 +41,8 @@ internal class CashedFetchOperationExecutorTest {
     fun setup() {
         MockKAnnotations.init(this)
         cashedFetchOperationExecutor = CashedFetchOperationExecutor(
-            insertDao = insertDoa,
+            updateDao = updateDao,
             queryDao = queryDao,
-            deleteDao = deleteDao,
             dtoToEntityMapper = dtoToEntityMapper,
             entityToDataMapper = entityToDataMapper,
             logger = logger
@@ -71,8 +67,7 @@ internal class CashedFetchOperationExecutorTest {
             assert((response as OperationResult.Failure).throwable is OperationException)
             coVerify(exactly = 1) { apiOperation() }
             coVerify(exactly = 1) { queryDao.getAll() }
-            coVerify(exactly = 0) { deleteDao.deleteAll() }
-            coVerify(exactly = 0) { insertDoa.insert(any<List<Model.Entity>>()) }
+            coVerify(exactly = 0) { updateDao.updateAll(any<List<Model.Entity>>()) }
             verify(exactly = 2) { logger.logError(throwable = any(), message = any()) }
         }
 
@@ -99,8 +94,7 @@ internal class CashedFetchOperationExecutorTest {
             )
             coVerify(exactly = 1) { apiOperation() }
             coVerify(exactly = 1) { queryDao.getAll() }
-            coVerify(exactly = 0) { deleteDao.deleteAll() }
-            coVerify(exactly = 0) { insertDoa.insert(any<List<Model.Entity>>()) }
+            coVerify(exactly = 0) { updateDao.updateAll(any<List<Model.Entity>>()) }
             coVerify(exactly = 1) { entityToDataMapper(any()) }
             verify(exactly = 1) { logger.logError(throwable = thrownExceptions, message = any()) }
 
@@ -113,8 +107,7 @@ internal class CashedFetchOperationExecutorTest {
             val apiOperation = mockk<suspend () -> List<Model.Dto>>()
             coEvery { apiOperation() } returns mockk()
             coEvery { queryDao.getAll() } returns mockk()
-            coEvery { deleteDao.deleteAll() } returns Unit
-            coEvery { insertDoa.insert(any<List<Model.Entity>>()) } returns Unit
+            coEvery { updateDao.updateAll(any<List<Model.Entity>>()) } returns Unit
 
             every { dtoToEntityMapper(any()) } returns mockk()
 
@@ -132,8 +125,7 @@ internal class CashedFetchOperationExecutorTest {
             )
             coVerify(exactly = 1) { apiOperation() }
             coVerify(exactly = 1) { queryDao.getAll() }
-            coVerify(exactly = 1) { deleteDao.deleteAll() }
-            coVerify(exactly = 1) { insertDoa.insert(any<List<Model.Entity>>()) }
+            coVerify(exactly = 1) { updateDao.updateAll(any<List<Model.Entity>>()) }
             coVerify(exactly = 1) { entityToDataMapper(any()) }
             coVerify(exactly = 1) { dtoToEntityMapper(any()) }
         }
@@ -145,8 +137,7 @@ internal class CashedFetchOperationExecutorTest {
             val apiOperation = mockk<suspend () -> List<Model.Dto>>()
             coEvery { apiOperation() } returns mockk()
             coEvery { queryDao.getAll() } returns mockk()
-            coEvery { deleteDao.deleteAll() } returns Unit
-            coEvery { insertDoa.insert(any<List<Model.Entity>>()) } returns Unit
+            coEvery { updateDao.updateAll(any<List<Model.Entity>>()) } returns Unit
 
             every { dtoToEntityMapper(any()) } returns mockk()
 
@@ -164,8 +155,7 @@ internal class CashedFetchOperationExecutorTest {
             )
             coVerify(exactly = 1) { apiOperation() }
             coVerify(exactly = 1) { queryDao.getAll() }
-            coVerify(exactly = 1) { deleteDao.deleteAll() }
-            coVerify(exactly = 1) { insertDoa.insert(any<List<Model.Entity>>()) }
+            coVerify(exactly = 1) { updateDao.updateAll(any<List<Model.Entity>>()) }
             coVerify(exactly = 1) { entityToDataMapper(any()) }
             coVerify(exactly = 1) { dtoToEntityMapper(any()) }
         }
@@ -178,8 +168,7 @@ internal class CashedFetchOperationExecutorTest {
             coEvery { apiOperation() } returns mockk()
             coEvery { queryDao.getAll() } returns mockk()
             val thrownException = Exception()
-            coEvery { deleteDao.deleteAll() } throws thrownException // Failing local storage operation
-            coEvery { insertDoa.insert(any<List<Model.Entity>>()) } returns Unit
+            coEvery { updateDao.updateAll(any<List<Model.Entity>>()) } throws thrownException // Failing local storage operation
 
             every { dtoToEntityMapper(any()) } returns mockk()
 
@@ -197,8 +186,7 @@ internal class CashedFetchOperationExecutorTest {
             )
             coVerify(exactly = 1) { apiOperation() }
             coVerify(exactly = 0) { queryDao.getAll() }
-            coVerify(exactly = 1) { deleteDao.deleteAll() }
-            coVerify(exactly = 0) { insertDoa.insert(any<List<Model.Entity>>()) }
+            coVerify(exactly = 0) { updateDao.updateAll(any<List<Model.Entity>>()) }
             coVerify(exactly = 1) { entityToDataMapper(any()) }
             coVerify(exactly = 1) { dtoToEntityMapper(any()) }
             verify(exactly = 1) { logger.logError(throwable = thrownException, message = any()) }

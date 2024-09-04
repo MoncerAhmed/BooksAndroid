@@ -13,7 +13,6 @@ import nl.ahmed.data.storage.implementation.entities.BookEntityImpl
 @Module(includes = [BooksModule.BooksProvidersModule::class, BooksModule.BooksBindersModule::class])
 internal interface BooksModule {
 
-
     @Module
     class BooksProvidersModule {
         @Singleton
@@ -37,9 +36,9 @@ internal interface BooksModule {
 
         @Singleton
         @Binds
-        fun bindsInsertDao(
+        fun bindsUpdateDao(
             booksDao: BooksDao
-        ): Dao.Insert<BookEntity>
+        ): Dao.Update<BookEntity>
 
         @Singleton
         @Binds

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 import nl.ahmed.data.storage.api.BookDatabase
 import nl.ahmed.data.storage.implementation.BookDatabaseImpl
 
-@Module(includes = [BooksModule::class])
+@Module(includes = [BooksModule::class, FavoritesModule::class])
 internal class DataStorageModule {
 
     @Singleton

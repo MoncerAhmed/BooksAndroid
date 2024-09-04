@@ -3,30 +3,29 @@ package nl.ahmed.data.storage.implementation.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import nl.ahmed.common.kotlin.templates.Model
 import nl.ahmed.data.storage.api.daos.BooksDao
 import nl.ahmed.data.storage.api.entities.BookEntity
 import nl.ahmed.data.storage.implementation.entities.BookEntityImpl
+import nl.ahmed.data.storage.implementation.entities.FavoriteEntityImpl
 
 @Dao
 internal interface BooksDaoImpl : BooksDao {
 
     override suspend fun getAll(): List<BookEntity> {
-        return _getBooks()
+        return _get()
     }
 
     override suspend fun get(id: Model.Entity.Id): BookEntity {
-        return _getBook(bookId = id.value)
+        return _get(bookId = id.value)
     }
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun insert(items: List<BookEntity>) {
-        return _insterBooks(items as List<BookEntityImpl>)
-    }
-
-    override suspend fun insert(item: BookEntity) {
-        return _insterBook(item as BookEntityImpl)
+    override suspend fun updateAll(items: List<BookEntity>) {
+        updateBooksAndFavorites(items as List<BookEntityImpl>)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -38,17 +37,28 @@ internal interface BooksDaoImpl : BooksDao {
         _deleteAll()
     }
 
+    @Transaction
+    suspend fun updateBooksAndFavorites(items: List<BookEntityImpl>) {
+        _insert(items)
+        val favorites = _getFavorites()
+        val toDeleteFavorites = favorites.filter { favorite -> items.none { it.id == favorite.id } }
+        _deleteFavorites(*toDeleteFavorites.toTypedArray())
+    }
+
+    @Query("SELECT * FROM favorites")
+    suspend fun _getFavorites(): List<FavoriteEntityImpl>
+
+    @Delete
+    suspend fun _deleteFavorites(vararg favorite: FavoriteEntityImpl)
+
     @Query("SELECT * FROM books")
-    suspend fun _getBooks(): List<BookEntityImpl>
+    suspend fun _get(): List<BookEntityImpl>
 
     @Query("SELECT * FROM books WHERE id = :bookId")
-    suspend fun _getBook(bookId: String): BookEntityImpl
+    suspend fun _get(bookId: String): BookEntityImpl
 
-    @Insert
-    suspend fun _insterBooks(books: List<BookEntityImpl>)
-
-    @Insert
-    suspend fun _insterBook(book: BookEntityImpl)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun _insert(books: List<BookEntityImpl>)
 
     @Delete
     suspend fun _delete(vararg books: BookEntityImpl)

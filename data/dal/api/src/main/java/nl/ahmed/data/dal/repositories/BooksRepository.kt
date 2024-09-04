@@ -1,4 +1,4 @@
-package nl.ahmed.data.dal
+package nl.ahmed.data.dal.repositories
 
 import nl.ahmed.common.kotlin.operation.models.OperationResult
 import nl.ahmed.data.dal.models.BookData
