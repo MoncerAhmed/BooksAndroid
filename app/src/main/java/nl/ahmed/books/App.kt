@@ -6,6 +6,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import nl.ahmed.books.di.AppComponent
 import nl.ahmed.books.di.DaggerAppComponent
+import nl.ahmed.common.kotlin.operation.models.OperationResult
 import nl.ahmed.common.kotlin.utils.Logger
 import nl.ahmed.core.api.di.CoreComponent
 import nl.ahmed.core.di.DaggerCoreComponentImpl
@@ -58,9 +59,13 @@ internal class App : Application() {
         appComponent.inject(this)
 
         MainScope().launch {
-            val books = booksRepository.getBooks(keyword = "")
-
-            logger.logError("This is from the app $books")
+            when(val result = booksRepository.getBooks(keyword = "")) {
+                is OperationResult.Success -> logger.logInfo("This is from the app ${result.data}")
+                is OperationResult.Failure -> logger.logError(
+                    throwable = result.throwable,
+                    message = "Error"
+                )
+            }
         }
     }
 }
