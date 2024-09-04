@@ -3,34 +3,25 @@ package nl.ahmed.books.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import nl.ahmed.books.ui.theme.BooksTheme
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
+import nl.ahmed.books.R
+import nl.ahmed.books.databinding.ActivityMainBinding
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSplashScreenDuration()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            BooksTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
+        setContentView(binding.root)
+        setupBottomNavigationBar()
     }
 
     private fun setupSplashScreenDuration() {
@@ -39,20 +30,28 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition { keepSplashScreen }
         Handler(Looper.getMainLooper()).postDelayed({ keepSplashScreen = false }, delay)
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun setupBottomNavigationBar() {
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.home -> {
+                    loadHomeFragment()
+                    true
+                }
+                R.id.favorite -> {
+                    loadFavoriteFragment()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BooksTheme {
-        Greeting("Android")
+    private fun loadHomeFragment() {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.action_home)
+    }
+
+    private fun loadFavoriteFragment() {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.action_favorites)
     }
 }

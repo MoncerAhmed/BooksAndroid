@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSurface">@color/night</color>
+    <color name="colorOnSurface">@color/outer_space</color>
+    <color name="colorPrimary">@color/persian_green</color>
+</resources>
