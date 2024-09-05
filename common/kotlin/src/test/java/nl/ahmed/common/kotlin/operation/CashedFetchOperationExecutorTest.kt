@@ -8,11 +8,11 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import nl.ahmed.common.kotlin.templates.Mapper
+import nl.ahmed.templates.kotlin.Mapper
 import nl.ahmed.common.kotlin.operation.models.OperationException
 import nl.ahmed.common.kotlin.operation.models.OperationResult
-import nl.ahmed.common.kotlin.templates.Dao
-import nl.ahmed.common.kotlin.templates.Model
+import nl.ahmed.templates.kotlin.Dao
+import nl.ahmed.templates.kotlin.Model
 import nl.ahmed.common.kotlin.utils.Logger
 import org.junit.Assert.assertEquals
 import org.junit.Before

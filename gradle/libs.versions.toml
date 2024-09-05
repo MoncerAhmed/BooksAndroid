@@ -78,6 +78,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+navigation-safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref="navigation" }
 
 [bundles]
 dagger = ["dagger-dagger", "dagger-androidSupport"]

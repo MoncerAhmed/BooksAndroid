@@ -12,6 +12,7 @@ dependencies {
     api(project(":data:network:api"))
     implementation(project(":core:api"))
     implementation(project(":common:kotlin"))
+    implementation(project(":templates:kotlin"))
 
     // Retrofit
     implementation(libs.networking.retrofit)

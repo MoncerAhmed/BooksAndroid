@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":designsystem"))
     implementation(project(":core:api"))
     implementation(project(":navigation"))
+    implementation(project(":templates:android"))
 
     // Dagger
     implementation(libs.bundles.dagger)

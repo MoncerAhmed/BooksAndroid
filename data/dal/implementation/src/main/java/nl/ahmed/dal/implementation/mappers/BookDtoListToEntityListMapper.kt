@@ -1,7 +1,7 @@
 package nl.ahmed.dal.implementation.mappers
 
 import javax.inject.Inject
-import nl.ahmed.common.kotlin.templates.Mapper
+import nl.ahmed.templates.kotlin.Mapper
 import nl.ahmed.data.network.api.dtos.BookDto
 import nl.ahmed.data.storage.api.entities.BookEntity
 

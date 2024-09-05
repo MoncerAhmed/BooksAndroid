@@ -1,6 +1,6 @@
 package nl.ahmed.data.storage.api.di
 
-import nl.ahmed.common.kotlin.templates.Dao
+import nl.ahmed.templates.kotlin.Dao
 import nl.ahmed.data.storage.api.daos.BooksDao
 import nl.ahmed.data.storage.api.daos.FavoritesDao
 import nl.ahmed.data.storage.api.entities.BookEntity

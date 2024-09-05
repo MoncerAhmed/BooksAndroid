@@ -1,4 +1,4 @@
-package nl.ahmed.common.kotlin.templates
+package nl.ahmed.templates.kotlin
 
 sealed interface Model {
     interface Data : Model

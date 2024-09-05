@@ -3,20 +3,14 @@ package nl.ahmed.books.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.findNavController
-import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
-import javax.inject.Provider
 import nl.ahmed.books.R
 import nl.ahmed.books.databinding.ActivityMainBinding
-import nl.ahmed.navigation.AppNavigator
+import nl.ahmed.templates.android.DaggerNavigatorOwnerActivity
 
-class MainActivity : DaggerAppCompatActivity() {
-
-    @Inject
-    lateinit var appNavigator: Provider<AppNavigator>
+internal class MainActivity : DaggerNavigatorOwnerActivity<MainNavigator>() {
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -28,11 +22,16 @@ class MainActivity : DaggerAppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
         setupBottomNavigationBar()
+        onBackPressedDispatcher.addCallback(owner = this) {
+            if (!navigator.navigateUp()) {
+                finish()
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        println("This is from the activity: ${appNavigator.get()}")
+        println("This is from the activity: $navigator")
     }
 
     private fun setupSplashScreenDuration() {
@@ -44,7 +43,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun setupBottomNavigationBar() {
         binding.bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.home -> {
                     loadHomeFragment()
                     true
@@ -59,10 +58,10 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun loadHomeFragment() {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.action_home)
+        navigator.navigateToHome()
     }
 
     private fun loadFavoriteFragment() {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.action_favorites)
+        navigator.navigateToFavorite()
     }
 }

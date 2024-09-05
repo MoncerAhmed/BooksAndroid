@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import nl.ahmed.common.kotlin.templates.Model
+import nl.ahmed.templates.kotlin.Model
 import nl.ahmed.data.storage.api.daos.FavoritesDao
 import nl.ahmed.data.storage.api.entities.BookEntity
 import nl.ahmed.data.storage.api.entities.FavoriteEntity

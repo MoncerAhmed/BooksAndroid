@@ -1,4 +1,4 @@
-package nl.ahmed.common.kotlin.templates
+package nl.ahmed.templates.kotlin
 
 sealed interface Dao {
     interface Insert<E: Model.Entity> : Dao {

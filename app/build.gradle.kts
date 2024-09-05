@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.navigation.safeArgs)
 }
 
 android {
@@ -38,6 +39,8 @@ dependencies {
     implementation(project(":data:network:implementation"))
     implementation(project(":data:dal:implementation"))
     implementation(project(":common:kotlin"))
+    implementation(project(":templates:kotlin"))
+    implementation(project(":templates:android"))
     implementation(project(":navigation"))
 
     implementation(project(":features:home"))

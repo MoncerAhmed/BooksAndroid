@@ -10,4 +10,5 @@ java {
 
 dependencies {
     implementation(project(":common:kotlin"))
+    implementation(project(":templates:kotlin"))
 }

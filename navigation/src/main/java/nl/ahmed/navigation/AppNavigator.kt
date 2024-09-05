@@ -1,9 +1,11 @@
 package nl.ahmed.navigation
 
 interface AppNavigator {
-    fun navigateToHome()
+    fun navigateToHome(clearBackStack: Boolean= false)
 
-    fun navigateToFavorite()
+    fun navigateToFavorites(clearBackStack: Boolean = false)
 
-    fun navigateToDetails(bookId: String)
+    fun navigateToDetails(bookId: String, clearBackStack: Boolean = false)
+
+    fun navigateUp(): Boolean
 }

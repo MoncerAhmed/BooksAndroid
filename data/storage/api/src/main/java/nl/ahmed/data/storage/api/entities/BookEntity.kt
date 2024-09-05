@@ -1,7 +1,7 @@
 package nl.ahmed.data.storage.api.entities
 
 import java.time.ZonedDateTime
-import nl.ahmed.common.kotlin.templates.Model
+import nl.ahmed.templates.kotlin.Model
 
 interface BookEntity : Model.Entity {
     override val id: Id

@@ -3,6 +3,7 @@ package nl.ahmed.features.favorites
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -11,11 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
-import dagger.android.support.DaggerFragment
 import nl.ahmed.designsystem.theme.BooksTheme
+import nl.ahmed.templates.android.DaggerNavigatorOwnerFragment
 
-internal class FavoritesFragment : DaggerFragment() {
+internal class FavoritesFragment : DaggerNavigatorOwnerFragment<FavoritesNavigator>() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,7 +27,9 @@ internal class FavoritesFragment : DaggerFragment() {
                 Surface {
                     Greeting(
                         name = "Android",
-                        modifier = Modifier.statusBarsPadding()
+                        modifier = Modifier.statusBarsPadding().clickable {
+                            navigator.navigateToHome()
+                        }
                     )
                 }
             }

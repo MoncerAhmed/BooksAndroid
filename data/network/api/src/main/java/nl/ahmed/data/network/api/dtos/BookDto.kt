@@ -1,7 +1,7 @@
 package nl.ahmed.data.network.api.dtos
 
 import java.time.ZonedDateTime
-import nl.ahmed.common.kotlin.templates.Model
+import nl.ahmed.templates.kotlin.Model
 
 data class BookDto(
     val id: Id,

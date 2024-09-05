@@ -9,6 +9,8 @@ java {
 }
 
 dependencies {
+    implementation(project(":templates:kotlin"))
+
     implementation(libs.inject)
 
     testImplementation(libs.junit)
