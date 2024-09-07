@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import javax.inject.Inject
-import nl.ahmed.core.api.di.ActivityScope
+import nl.ahmed.common.kotlin.di.ActivityScope
 import nl.ahmed.navigation.AppNavigator
 
 @ActivityScope

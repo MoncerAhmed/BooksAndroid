@@ -8,5 +8,7 @@ interface FavoritesRepository {
 
     suspend fun getFavorites(): OperationResult<List<BookData>>
 
+    suspend fun isFavorite(bookId: BookData.Id): OperationResult<Boolean>
+
     suspend fun deleteFavorite(bookId: BookData.Id): OperationResult<Unit>
 }

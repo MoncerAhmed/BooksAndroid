@@ -5,7 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Named
 import nl.ahmed.core.api.di.CoreComponent
-import nl.ahmed.core.api.di.CoreScope
+import nl.ahmed.common.kotlin.di.CoreScope
 import nl.ahmed.core.di.modules.CoreModule
 import nl.ahmed.core.di.modules.NetworkingModule
 

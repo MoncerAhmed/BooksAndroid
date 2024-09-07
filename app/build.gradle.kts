@@ -43,7 +43,7 @@ dependencies {
     implementation(project(":templates:android"))
     implementation(project(":navigation"))
 
-    implementation(project(":features:home"))
+    implementation(project(":features:home:shared"))
     implementation(project(":features:favorites"))
 
     // Dagger

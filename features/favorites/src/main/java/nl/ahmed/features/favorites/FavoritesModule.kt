@@ -2,7 +2,7 @@ package nl.ahmed.features.favorites
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import nl.ahmed.core.api.di.FragmentScope
+import nl.ahmed.common.kotlin.di.FragmentScope
 
 @Module
 abstract class FavoritesModule {

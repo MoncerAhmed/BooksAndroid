@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import nl.ahmed.designsystem.theme.BooksTheme
-import nl.ahmed.templates.android.DaggerNavigatorOwnerFragment
 
-internal class FavoritesFragment : DaggerNavigatorOwnerFragment<FavoritesNavigator>() {
+internal class FavoritesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,7 +28,7 @@ internal class FavoritesFragment : DaggerNavigatorOwnerFragment<FavoritesNavigat
                     Greeting(
                         name = "Android",
                         modifier = Modifier.statusBarsPadding().clickable {
-                            navigator.navigateToHome()
+                            // navigator.navigateToHome()
                         }
                     )
                 }

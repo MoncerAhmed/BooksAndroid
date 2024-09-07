@@ -5,19 +5,22 @@ import dagger.android.DaggerApplication
 import javax.inject.Inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import nl.ahmed.books.di.AppComponent
-import nl.ahmed.books.di.DaggerAppComponent
+import nl.ahmed.books.di.app.AppComponent
+import nl.ahmed.books.di.app.DaggerAppComponent
 import nl.ahmed.common.kotlin.operation.models.OperationResult
 import nl.ahmed.common.kotlin.utils.Logger
 import nl.ahmed.core.api.di.CoreComponent
+import nl.ahmed.core.api.di.CoreComponentProvider
 import nl.ahmed.core.di.DaggerCoreComponentImpl
 import nl.ahmed.dal.implementation.di.DaggerDataDalComponentImpl
+import nl.ahmed.data.dal.di.DataDalComponent
+import nl.ahmed.data.dal.di.DataDalComponentProvider
 import nl.ahmed.data.dal.repositories.BooksRepository
 import nl.ahmed.data.dal.repositories.FavoritesRepository
 import nl.ahmed.data.network.implementation.di.DaggerDataNetworkComponentImpl
 import nl.ahmed.data.storage.implementation.di.DaggerDataStorageComponentImpl
 
-internal class App : DaggerApplication() {
+internal class App : DaggerApplication(), DataDalComponentProvider, CoreComponentProvider {
 
     @Inject
     lateinit var logger: Logger
@@ -27,6 +30,8 @@ internal class App : DaggerApplication() {
 
     @Inject
     lateinit var favoritesRepository: FavoritesRepository
+
+    private lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -81,10 +86,23 @@ internal class App : DaggerApplication() {
             .withLoggerProvidingComponent(coreComponent)
             .build()
 
-        return DaggerAppComponent
+        appComponent = DaggerAppComponent
             .builder()
             .withCoreComponent(coreComponent)
             .withDataDalComponent(dataDalComponent)
             .build()
+        return appComponent
+    }
+
+    internal fun getAppComponent(): AppComponent {
+        return appComponent
+    }
+
+    override fun getDataDalComponent(): DataDalComponent {
+        return appComponent.dataDalComponent()
+    }
+
+    override fun getCoreComponent(): CoreComponent {
+        return appComponent.coreComponent()
     }
 }

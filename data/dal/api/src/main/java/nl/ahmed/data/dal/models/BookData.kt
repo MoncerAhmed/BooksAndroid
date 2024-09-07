@@ -1,7 +1,7 @@
 package nl.ahmed.data.dal.models
 
 import java.time.ZonedDateTime
-import nl.ahmed.templates.kotlin.Model
+import nl.ahmed.templates.kotlin.data.Model
 
 data class BookData(
     val id: Id,

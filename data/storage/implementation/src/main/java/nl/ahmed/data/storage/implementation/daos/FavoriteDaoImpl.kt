@@ -1,11 +1,10 @@
 package nl.ahmed.data.storage.implementation.daos
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import nl.ahmed.templates.kotlin.Model
+import nl.ahmed.templates.kotlin.data.Model
 import nl.ahmed.data.storage.api.daos.FavoritesDao
 import nl.ahmed.data.storage.api.entities.BookEntity
 import nl.ahmed.data.storage.api.entities.FavoriteEntity
@@ -31,6 +30,10 @@ internal interface FavoriteDaoImpl : FavoritesDao {
         _insert(item as FavoriteEntityImpl)
     }
 
+    override suspend fun isFavorite(bookId: BookEntity.Id): Boolean {
+        return _isFavorite(id = bookId.value)
+    }
+
     @Suppress("UNCHECKED_CAST")
     override suspend fun delete(vararg items: FavoriteEntity) {
         _delete(items.map { it.id })
@@ -51,6 +54,9 @@ internal interface FavoriteDaoImpl : FavoritesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun _insert(item: FavoriteEntityImpl)
+
+    @Query("SELECT EXISTS(SELECT * FROM favorites WHERE id = :id)")
+    suspend fun _isFavorite(id: String): Boolean
 
     @Query("DELETE FROM favorites WHERE id IN (:itemIds)")
     suspend fun _delete(itemIds: List<BookEntity.Id>)

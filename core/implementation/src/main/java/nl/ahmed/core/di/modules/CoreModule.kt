@@ -2,7 +2,7 @@ package nl.ahmed.core.di.modules
 
 import dagger.Module
 import dagger.Provides
-import nl.ahmed.core.api.di.CoreScope
+import nl.ahmed.common.kotlin.di.CoreScope
 import nl.ahmed.core.utils.LoggerImpl
 
 @Module

@@ -1,11 +1,11 @@
 package nl.ahmed.common.kotlin.operation
 
 import javax.inject.Inject
-import nl.ahmed.templates.kotlin.Mapper
+import nl.ahmed.templates.kotlin.data.Mapper
 import nl.ahmed.common.kotlin.operation.models.OperationException
 import nl.ahmed.common.kotlin.operation.models.OperationResult
-import nl.ahmed.templates.kotlin.Dao
-import nl.ahmed.templates.kotlin.Model
+import nl.ahmed.templates.kotlin.data.Dao
+import nl.ahmed.templates.kotlin.data.Model
 import nl.ahmed.common.kotlin.utils.Logger
 
 class CashedFetchOperationExecutor<DTO : Model.Dto, E : Model.Entity, D: Model.Data> @Inject constructor(

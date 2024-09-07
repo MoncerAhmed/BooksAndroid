@@ -17,10 +17,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":designsystem"))
+    implementation(project(":designsystem:implementation"))
     implementation(project(":core:api"))
     implementation(project(":navigation"))
     implementation(project(":templates:android"))
+    implementation(project(":templates:kotlin"))
+    implementation(project(":common:kotlin"))
 
     // Dagger
     implementation(libs.bundles.dagger)

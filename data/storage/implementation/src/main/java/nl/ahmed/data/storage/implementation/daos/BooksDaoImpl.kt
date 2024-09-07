@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import nl.ahmed.templates.kotlin.Model
+import nl.ahmed.templates.kotlin.data.Model
 import nl.ahmed.data.storage.api.daos.BooksDao
 import nl.ahmed.data.storage.api.entities.BookEntity
 import nl.ahmed.data.storage.implementation.entities.BookEntityImpl

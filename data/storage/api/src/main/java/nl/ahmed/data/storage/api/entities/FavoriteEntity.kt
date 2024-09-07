@@ -1,6 +1,6 @@
 package nl.ahmed.data.storage.api.entities
 
-import nl.ahmed.templates.kotlin.Model
+import nl.ahmed.templates.kotlin.data.Model
 
 interface FavoriteEntity : Model.Entity {
     override val id: BookEntity.Id

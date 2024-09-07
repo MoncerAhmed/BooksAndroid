@@ -7,7 +7,7 @@ import dagger.Provides
 import java.time.ZonedDateTime
 import javax.inject.Named
 import nl.ahmed.common.android.converters.retrofit.LocalDateTimeAdapter
-import nl.ahmed.core.api.di.CoreScope
+import nl.ahmed.common.kotlin.di.CoreScope
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
