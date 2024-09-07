@@ -2,21 +2,35 @@ package nl.ahmed.features.home.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import javax.inject.Inject
-import kotlin.random.Random
 import nl.ahmed.common.kotlin.di.FragmentScope
-import nl.ahmed.designsystem.composables.book.BookCard
 import nl.ahmed.designsystem.api.models.BookCardViewState
+import nl.ahmed.designsystem.composables.book.BookCard
 import nl.ahmed.designsystem.theme.BooksTheme
 import nl.ahmed.features.home.presentation.api.HomeIntent
 import nl.ahmed.features.home.presentation.api.HomeScreenState
@@ -29,9 +43,13 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
     override fun Screen(screenState: HomeScreenState, intentExecutor: (HomeIntent) -> Unit) {
         BooksTheme {
             Surface {
-                HomeScreen(screenState) {
-                    navigator.navigateToFavorites()
-                }
+                HomeScreen(
+                    screenState = screenState,
+                    onItemClicked = { navigator.navigateToFavorites() },
+                    onFavoriteButtonClick = { intentExecutor(HomeIntent.FavoriteButtonClick(it)) },
+                    onSearchKeywordChange = { intentExecutor(HomeIntent.SearchKeywordChange(it)) },
+                    onClearSearchKeyword = { intentExecutor(HomeIntent.ClearSearchKeyword) }
+                )
             }
         }
     }
@@ -41,33 +59,95 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
     screenState: HomeScreenState,
-    onClick: () -> Unit
+    onItemClicked: (BookCardViewState) -> Unit,
+    onFavoriteButtonClick: (BookCardViewState) -> Unit,
+    onSearchKeywordChange: (String) -> Unit,
+    onClearSearchKeyword: () -> Unit
 ) {
-    when(screenState) {
-        is HomeScreenState.Loading -> LoadingHomeScreen()
-        is HomeScreenState.Loaded -> LoadedHomeScreenContent(screenState)
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                SearchBar(
+                    query = screenState.searchKeyword,
+                    onQueryChange = onSearchKeywordChange,
+                    onSearch = {},
+                    active = false,
+                    onActiveChange = {},
+                    content = {},
+                    trailingIcon = {
+                        if(screenState.searchKeyword.isEmpty()) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search icon")
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Search icon",
+                                modifier = Modifier.clickable(onClick = onClearSearchKeyword)
+                            )
+                        }
+                    },
+                    placeholder = {
+                        Text(text = stringResource(id = R.string.search_placeholder))
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+        }
+    ) { contentPadding ->
+        Surface(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
+            when(screenState) {
+                is HomeScreenState.Loading -> LoadingHomeScreen()
+                is HomeScreenState.Empty -> EmptyHomeScreen()
+                is HomeScreenState.Loaded -> LoadedHomeScreenContent(
+                    screenState = screenState,
+                    onFavoriteButtonClick = onFavoriteButtonClick
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun LoadingHomeScreen() {
-    CircularProgressIndicator()
+    Column(modifier = Modifier.fillMaxSize()) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(32.dp)
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(top = 32.dp)
+        )
+    }
 }
 
 @Composable
-private fun LoadedHomeScreenContent(screenState: HomeScreenState.Loaded) {
+private fun EmptyHomeScreen() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = stringResource(id = R.string.empty_label),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun LoadedHomeScreenContent(
+    screenState: HomeScreenState.Loaded,
+    onFavoriteButtonClick: (BookCardViewState) -> Unit
+) {
     LazyColumn(
-        modifier = Modifier
-            .statusBarsPadding(),
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        contentPadding = PaddingValues(horizontal = 24.dp)
+        contentPadding = PaddingValues(24.dp),
     ) {
         items(screenState.bookCardsViewStates) {
             BookCard(
-                bookCardViewState = it
+                bookCardViewState = it,
+                onFavoriteButtonClick = onFavoriteButtonClick
             )
         }
     }

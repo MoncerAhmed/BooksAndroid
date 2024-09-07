@@ -11,12 +11,14 @@ private val DarkColorScheme = darkColorScheme(
     surface = EerieBlack,
     surfaceVariant = Night,
     onSurface = WhiteSmoke,
+    primary = PersianGreen
 )
 
 private val LightColorScheme = lightColorScheme(
     surface = WhiteSmoke,
     surfaceVariant = FloralWhite,
-    onSurface = EerieBlack
+    onSurface = EerieBlack,
+    primary = PersianGreen
 )
 
 @Composable

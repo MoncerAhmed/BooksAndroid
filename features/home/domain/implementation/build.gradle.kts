@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":features:home:domain:api"))
     implementation(project(":common:kotlin"))
     implementation(project(":templates:kotlin"))
+    implementation(project(":data:dal:api"))
 
     implementation(libs.dagger.dagger)
     kapt(libs.dagger.compiler)

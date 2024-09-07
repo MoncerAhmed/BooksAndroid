@@ -2,6 +2,7 @@ package nl.ahmed.designsystem.composables.book
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +33,11 @@ import nl.ahmed.designsystem.theme.BooksTheme
 import nl.ahmed.designsystem.utils.rememberAsyncImageNonCacheablePainter
 
 @Composable
-fun BookCard(bookCardViewState: BookCardViewState, modifier: Modifier = Modifier) {
+fun BookCard(
+    bookCardViewState: BookCardViewState,
+    onFavoriteButtonClick: (BookCardViewState) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier) {
         Card(
             modifier = Modifier.aspectRatio(2f),
@@ -97,6 +101,9 @@ fun BookCard(bookCardViewState: BookCardViewState, modifier: Modifier = Modifier
                             contentDescription = "",
                             modifier = Modifier
                                 .size(32.dp)
+                                .clickable {
+                                    onFavoriteButtonClick(bookCardViewState)
+                                }
                         )
                     }
                     Row(modifier = Modifier.padding(top = 2.dp)) {
@@ -162,6 +169,9 @@ private fun BookCardPreview(
     bookCardViewState: BookCardViewState
 ) {
     BooksTheme {
-        BookCard(bookCardViewState = bookCardViewState)
+        BookCard(
+            bookCardViewState = bookCardViewState,
+            onFavoriteButtonClick = { }
+        )
     }
 }
