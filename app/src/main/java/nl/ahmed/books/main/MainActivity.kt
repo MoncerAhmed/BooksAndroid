@@ -45,11 +45,6 @@ internal class MainActivity : DaggerNavigatorOwnerActivity<MainNavigator>(), App
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        println("This is from the activity: $navigator")
-    }
-
     private fun setupSplashScreenDuration() {
         var keepSplashScreen = true
         val delay = 2500L

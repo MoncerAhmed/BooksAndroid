@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_placeholder">Search</string>
-    <string name="empty_label">Sorry! We couldn\'t find you a good book</string>
+    <string name="home_empty_label">Sorry! We couldn\'t find you a good book</string>
 </resources>

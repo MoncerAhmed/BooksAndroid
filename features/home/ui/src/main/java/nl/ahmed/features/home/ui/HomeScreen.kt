@@ -130,7 +130,7 @@ private fun LoadingHomeScreen() {
 private fun EmptyHomeScreen() {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
-            text = stringResource(id = R.string.empty_label),
+            text = stringResource(id = R.string.home_empty_label),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 32.dp)

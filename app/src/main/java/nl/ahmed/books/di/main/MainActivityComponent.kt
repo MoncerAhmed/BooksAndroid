@@ -13,7 +13,6 @@ import nl.ahmed.navigation.di.AppNavigatorComponent
         AppComponent::class
     ],
     modules = [
-        FeaturesModule::class,
         MainActivityModule::class
     ]
 )

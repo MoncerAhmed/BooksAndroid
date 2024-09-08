@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorite_empty_label">Sorry that you wasn\'t able to find any favorite book here!</string>
+</resources>
