@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "nl.ahmed.feature.home.shared"
+    namespace = "nl.ahmed.features.home.shared"
 
     buildFeatures {
         compose = true

@@ -14,10 +14,13 @@ internal class BooksRepositoryImpl @Inject constructor(
     private val operationExecutor: CashedFetchOperationExecutor<BookDto, BookEntity, BookData>
 ) : BooksRepository {
     override suspend fun getBooks(keyword: String): OperationResult<List<BookData>> {
-        val result = operationExecutor.execute { booksService.getAll().toMutableList() }
+        val result = operationExecutor.execute { booksService.getAll() }
         return when(result) {
             is OperationResult.Success -> {
-                val filteredBooks = result.data.filter { it.author.contains(keyword) || it.title.contains(keyword) }
+                val filteredBooks = result.data.filter {
+                    it.author.contains(other = keyword, ignoreCase = true)
+                        || it.title.contains(other = keyword, ignoreCase = true)
+                }
                 OperationResult.Success(filteredBooks)
             }
             is OperationResult.Failure -> result

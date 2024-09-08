@@ -45,7 +45,7 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
             Surface {
                 HomeScreen(
                     screenState = screenState,
-                    onItemClicked = { navigator.navigateToFavorites() },
+                    onItemClick = { intentExecutor(HomeIntent.ItemClick(it)) },
                     onFavoriteButtonClick = { intentExecutor(HomeIntent.FavoriteButtonClick(it)) },
                     onSearchKeywordChange = { intentExecutor(HomeIntent.SearchKeywordChange(it)) },
                     onClearSearchKeyword = { intentExecutor(HomeIntent.ClearSearchKeyword) }
@@ -55,7 +55,9 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
     }
 
     context(PerformSideEffectScope) override suspend fun performSideEffect(sideEffect: HomeSideEffect) {
-        TODO("Not yet implemented")
+        when(sideEffect) {
+            is HomeSideEffect.NavigateToDetails -> navigator.navigateToFavorites() // TODO: Make it navigate to details
+        }
     }
 }
 
@@ -63,7 +65,7 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
 @Composable
 private fun HomeScreen(
     screenState: HomeScreenState,
-    onItemClicked: (BookCardViewState) -> Unit,
+    onItemClick: (BookCardViewState) -> Unit,
     onFavoriteButtonClick: (BookCardViewState) -> Unit,
     onSearchKeywordChange: (String) -> Unit,
     onClearSearchKeyword: () -> Unit
@@ -104,6 +106,7 @@ private fun HomeScreen(
                 is HomeScreenState.Empty -> EmptyHomeScreen()
                 is HomeScreenState.Loaded -> LoadedHomeScreenContent(
                     screenState = screenState,
+                    onItemClick = onItemClick,
                     onFavoriteButtonClick = onFavoriteButtonClick
                 )
             }
@@ -138,6 +141,7 @@ private fun EmptyHomeScreen() {
 @Composable
 private fun LoadedHomeScreenContent(
     screenState: HomeScreenState.Loaded,
+    onItemClick: (BookCardViewState) -> Unit,
     onFavoriteButtonClick: (BookCardViewState) -> Unit
 ) {
     LazyColumn(
@@ -147,6 +151,7 @@ private fun LoadedHomeScreenContent(
         items(screenState.bookCardsViewStates) {
             BookCard(
                 bookCardViewState = it,
+                modifier = Modifier.clickable { onItemClick(it) },
                 onFavoriteButtonClick = onFavoriteButtonClick
             )
         }

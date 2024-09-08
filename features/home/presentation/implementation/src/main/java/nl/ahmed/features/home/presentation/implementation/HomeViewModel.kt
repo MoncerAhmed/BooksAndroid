@@ -1,7 +1,16 @@
 package nl.ahmed.features.home.presentation.implementation
 
+import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import nl.ahmed.common.kotlin.di.FragmentScope
 import nl.ahmed.common.kotlin.operation.doIfSuccessful
 import nl.ahmed.common.kotlin.operation.models.OperationResult
@@ -14,6 +23,7 @@ import nl.ahmed.features.home.presentation.implementation.mappers.BookDomainToVi
 import nl.ahmed.templates.android.MviViewModel
 import nl.ahmed.templates.kotlin.domain.UseCase
 
+@OptIn(FlowPreview::class)
 @FragmentScope
 internal class HomeViewModel @Inject constructor(
     private val getHomeBooksUseCase: UseCase<String, OperationResult<List<HomeBook>>>,
@@ -26,13 +36,24 @@ internal class HomeViewModel @Inject constructor(
     initialScreenState = HomeScreenState.Loading(searchKeyword = "")
 ) {
 
+    private val searchKeywordFlow = MutableStateFlow(currentScreenState.searchKeyword)
+
     init {
         handleIntent(HomeIntent.Initialized)
+        viewModelScope.launch {
+            searchKeywordFlow
+                .debounce(300L)
+                .distinctUntilChanged()
+                .collect {
+                    loadBooks()
+                }
+        }
     }
 
     override suspend fun onIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.Initialized -> handleInitializedIntent()
+            is HomeIntent.ItemClick -> handleItemClickIntent(intent)
             is HomeIntent.SearchKeywordChange -> handleSearchKeywordChangeIntent(intent)
             is HomeIntent.ClearSearchKeyword -> handleClearSearchKeywordIntent()
             is HomeIntent.FavoriteButtonClick -> handleFavoriteButtonClickIntent(intent)
@@ -43,18 +64,22 @@ internal class HomeViewModel @Inject constructor(
         loadBooks()
     }
 
+    private suspend fun handleItemClickIntent(intent: HomeIntent.ItemClick) {
+        emitSideEffect(HomeSideEffect.NavigateToDetails(intent.bookCardViewState))
+    }
+
     private suspend fun handleSearchKeywordChangeIntent(intent: HomeIntent.SearchKeywordChange) {
         updateScreenState {
             it.copyWithSearchKeyword(searchKeyword = intent.newKeyword)
         }
-        loadBooks()
+        searchKeywordFlow.emit(intent.newKeyword)
     }
 
     private suspend fun handleClearSearchKeywordIntent() {
         updateScreenState {
             it.copyWithSearchKeyword("")
         }
-        loadBooks()
+        searchKeywordFlow.emit("")
     }
 
     private suspend fun handleFavoriteButtonClickIntent(intent: HomeIntent.FavoriteButtonClick) {

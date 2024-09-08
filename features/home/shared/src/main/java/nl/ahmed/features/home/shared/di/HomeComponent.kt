@@ -1,10 +1,10 @@
-package nl.ahmed.feature.home.shared.di
+package nl.ahmed.features.home.shared.di
 
 import dagger.Component
 import nl.ahmed.core.api.di.CoreComponent
 import nl.ahmed.common.kotlin.di.FragmentScope
 import nl.ahmed.data.dal.di.DataDalComponent
-import nl.ahmed.feature.home.shared.HomeFragment
+import nl.ahmed.features.home.shared.HomeFragment
 import nl.ahmed.features.home.data.di.HomeDataModule
 import nl.ahmed.features.home.domain.implementation.di.HomeDomainModule
 import nl.ahmed.features.home.presentation.implementation.di.HomePresentationModule

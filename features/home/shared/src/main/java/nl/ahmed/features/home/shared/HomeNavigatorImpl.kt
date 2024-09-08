@@ -1,4 +1,4 @@
-package nl.ahmed.feature.home.shared
+package nl.ahmed.features.home.shared
 
 import javax.inject.Inject
 import nl.ahmed.common.kotlin.di.FragmentScope
