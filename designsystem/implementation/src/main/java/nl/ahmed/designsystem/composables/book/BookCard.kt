@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -60,103 +61,132 @@ fun BookCard(
                         .padding(horizontal = 12.dp)
                         .padding(bottom = 12.dp)
                 ) {
-                    Row {
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 12.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = bookCardViewState.title,
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onSurface,
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Row(
-                                verticalAlignment = Alignment.Bottom,
-                                modifier = Modifier.padding(start = 12.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.by),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.offset(y = (-1.7).dp)
-                                )
-                                Text(
-                                    text = bookCardViewState.author,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier
-                                        .offset(y = (-1.5).dp)
-                                        .padding(start = 2.dp)
-                                )
-                            }
-                        }
-                        val favoriteIconId = if (bookCardViewState.isFavorite)
-                            R.drawable.ic_favorite
-                        else
-                            R.drawable.ic_not_favorite
-                        Image(
-                            painter = painterResource(id = favoriteIconId),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clickable {
-                                    onFavoriteButtonClick(bookCardViewState)
-                                }
-                        )
+                    BookTitleSection(
+                        title = bookCardViewState.title,
+                        author = bookCardViewState.author,
+                        isFavorite = bookCardViewState.isFavorite
+                    ) {
+                        onFavoriteButtonClick(bookCardViewState)
                     }
-                    Row(modifier = Modifier.padding(top = 2.dp)) {
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_reads),
-                                contentDescription = ""
-                            )
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(2.dp)
-                            ) {
-                                Text(
-                                    text = bookCardViewState.reads,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.offset(y = (-1).dp)
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.reads),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                        Column(
-                            modifier = Modifier.weight(1f),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_reviews),
-                                contentDescription = ""
-                            )
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(2.dp)
-                            ) {
-                                Text(
-                                    text = bookCardViewState.reviews,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.offset(y = (-1).dp)
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.reviews),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                            }
-                        }
-                    }
+                    Spacer(modifier = Modifier.height(2.dp))
+                    BookReadsAndReviewsSection(
+                        reads = bookCardViewState.reads,
+                        reviews = bookCardViewState.reviews
+                    )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun BookTitleSection(
+    title: String,
+    author: String,
+    isFavorite: Boolean,
+    contentPadding: PaddingValues = PaddingValues(start = 0.dp, top = 12.dp, end = 0.dp, bottom = 0.dp),
+    onFavoriteButtonClick: () -> Unit
+) {
+    Row {
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .weight(1f)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.padding(start = 12.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.by),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.offset(y = (-1.7).dp)
+                )
+                Text(
+                    text = author,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .offset(y = (-1.5).dp)
+                        .padding(start = 2.dp)
+                )
+            }
+        }
+        val favoriteIconId = if (isFavorite)
+            R.drawable.ic_favorite
+        else
+            R.drawable.ic_not_favorite
+        Image(
+            painter = painterResource(id = favoriteIconId),
+            contentDescription = "",
+            modifier = Modifier
+                .size(32.dp)
+                .clickable {
+                    onFavoriteButtonClick()
+                }
+        )
+    }
+}
+
+@Composable
+fun BookReadsAndReviewsSection(
+    reads: String,
+    reviews: String
+) {
+    Row {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_reads),
+                contentDescription = ""
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = reads,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.offset(y = (-1).dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.reads),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_reviews),
+                contentDescription = ""
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = reviews,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.offset(y = (-1).dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.reviews),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     }

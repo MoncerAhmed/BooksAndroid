@@ -1,14 +1,17 @@
 package nl.ahmed.features.favorites.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -17,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,7 +51,7 @@ internal class FavoritesScreen @Inject constructor() : BaseComposeScreen<Favorit
 
     context(PerformSideEffectScope) override suspend fun performSideEffect(sideEffect: FavoritesSideEffect) {
         when(sideEffect) {
-            is FavoritesSideEffect.NavigateToDetails -> navigator.navigateToHome() // TODO: Navigate to details
+            is FavoritesSideEffect.NavigateToDetails -> navigator.navigateToDetails(sideEffect.bookId)
         }
     }
 }
@@ -60,7 +62,7 @@ private fun FavoritesScreen(
     onItemClick: (BookCardViewState) -> Unit,
     onFavoriteButtonClick: (BookCardViewState) -> Unit
 ) {
-    Surface(modifier = Modifier.statusBarsPadding()) {
+    Surface(modifier = Modifier.padding(top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding())) {
         when(screenState) {
             is FavoritesScreenState.Loading -> LoadingFavoritesScreen()
             is FavoritesScreenState.Empty -> EmptyFavoritesScreen()

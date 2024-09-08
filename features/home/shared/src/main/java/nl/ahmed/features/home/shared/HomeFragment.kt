@@ -1,5 +1,7 @@
 package nl.ahmed.features.home.shared
 
+import android.os.Bundle
+import android.view.View
 import nl.ahmed.core.api.di.CoreComponentProvider
 import nl.ahmed.data.dal.di.DataDalComponentProvider
 import nl.ahmed.features.home.shared.di.DaggerHomeComponent
@@ -19,5 +21,10 @@ internal class HomeFragment : MviDaggerFragment<HomeScreenState, HomeIntent, Hom
             .withDataDalComponent((requireActivity().application as DataDalComponentProvider).getDataDalComponent())
             .build()
             .inject(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        handleIntent(HomeIntent.Initialized)
     }
 }

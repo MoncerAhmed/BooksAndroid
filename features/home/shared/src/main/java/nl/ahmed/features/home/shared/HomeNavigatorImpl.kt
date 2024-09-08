@@ -7,7 +7,7 @@ import nl.ahmed.templates.android.FeatureNavigator
 
 @FragmentScope
 internal class HomeNavigatorImpl @Inject constructor() : FeatureNavigator(), HomeNavigator {
-    override fun navigateToFavorites() {
-        appNavigator.navigateToFavorites()
+    override fun navigateToDetails(bookId: String) {
+        appNavigator.navigateToDetails(bookId)
     }
 }

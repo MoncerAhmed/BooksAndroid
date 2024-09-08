@@ -6,7 +6,7 @@ import nl.ahmed.data.dal.models.BookData
 import nl.ahmed.data.storage.api.entities.BookEntity
 
 internal class BookEntityListToDataListMapper @Inject constructor(
-    private val bookEntityToDataMapper: BookEntityToDataMapper
+    private val bookEntityToDataMapper: Mapper<BookEntity, BookData>
 ) : Mapper<@JvmSuppressWildcards List<BookEntity>, @JvmSuppressWildcards List<BookData>> {
     override fun invoke(
         bookEntityList: List<BookEntity>

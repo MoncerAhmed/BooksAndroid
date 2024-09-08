@@ -4,10 +4,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -56,7 +60,7 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
 
     context(PerformSideEffectScope) override suspend fun performSideEffect(sideEffect: HomeSideEffect) {
         when(sideEffect) {
-            is HomeSideEffect.NavigateToDetails -> navigator.navigateToFavorites() // TODO: Make it navigate to details
+            is HomeSideEffect.NavigateToDetails -> navigator.navigateToDetails(sideEffect.bookId)
         }
     }
 }
@@ -73,7 +77,7 @@ private fun HomeScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding())) {
                 SearchBar(
                     query = screenState.searchKeyword,
                     onQueryChange = onSearchKeywordChange,

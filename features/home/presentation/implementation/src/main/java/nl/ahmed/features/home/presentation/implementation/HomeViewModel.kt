@@ -39,7 +39,6 @@ internal class HomeViewModel @Inject constructor(
     private val searchKeywordFlow = MutableStateFlow(currentScreenState.searchKeyword)
 
     init {
-        handleIntent(HomeIntent.Initialized)
         viewModelScope.launch {
             searchKeywordFlow
                 .debounce(300L)
@@ -65,7 +64,7 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private suspend fun handleItemClickIntent(intent: HomeIntent.ItemClick) {
-        emitSideEffect(HomeSideEffect.NavigateToDetails(intent.bookCardViewState))
+        emitSideEffect(HomeSideEffect.NavigateToDetails(intent.bookCardViewState.id))
     }
 
     private suspend fun handleSearchKeywordChangeIntent(intent: HomeIntent.SearchKeywordChange) {

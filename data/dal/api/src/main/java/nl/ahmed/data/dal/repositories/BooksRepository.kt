@@ -5,4 +5,6 @@ import nl.ahmed.data.dal.models.BookData
 
 interface BooksRepository {
     suspend fun getBooks(keyword: String = ""): OperationResult<List<BookData>>
+
+    suspend fun getBook(bookId: BookData.Id): OperationResult<BookData>
 }

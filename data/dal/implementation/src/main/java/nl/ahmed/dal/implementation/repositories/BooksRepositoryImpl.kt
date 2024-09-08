@@ -1,6 +1,7 @@
 package nl.ahmed.dal.implementation.repositories
 
 import javax.inject.Inject
+import nl.ahmed.common.kotlin.operation.CashedFetchAllOperationExecutor
 import nl.ahmed.common.kotlin.operation.CashedFetchOperationExecutor
 import nl.ahmed.common.kotlin.operation.models.OperationResult
 import nl.ahmed.data.dal.models.BookData
@@ -11,10 +12,11 @@ import nl.ahmed.data.storage.api.entities.BookEntity
 
 internal class BooksRepositoryImpl @Inject constructor(
     private val booksService: BooksService,
-    private val operationExecutor: CashedFetchOperationExecutor<BookDto, BookEntity, BookData>
+    private val fetchAllOperationExecutor: CashedFetchAllOperationExecutor<BookDto, BookEntity, BookData>,
+    private val fetchOperationExecutor: CashedFetchOperationExecutor<BookDto, BookEntity, BookData>
 ) : BooksRepository {
     override suspend fun getBooks(keyword: String): OperationResult<List<BookData>> {
-        val result = operationExecutor.execute { booksService.getAll() }
+        val result = fetchAllOperationExecutor.execute { booksService.getAll() }
         return when(result) {
             is OperationResult.Success -> {
                 val filteredBooks = result.data.filter {
@@ -24,6 +26,12 @@ internal class BooksRepositoryImpl @Inject constructor(
                 OperationResult.Success(filteredBooks)
             }
             is OperationResult.Failure -> result
+        }
+    }
+
+    override suspend fun getBook(bookId: BookData.Id): OperationResult<BookData> {
+        return fetchOperationExecutor.execute(id = BookEntity.Id(bookId.value)) {
+            booksService.get(bookId.value)
         }
     }
 }

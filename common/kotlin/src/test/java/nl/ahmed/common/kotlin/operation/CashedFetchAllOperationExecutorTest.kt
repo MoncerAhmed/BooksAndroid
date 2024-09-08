@@ -18,7 +18,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-internal class CashedFetchOperationExecutorTest {
+internal class CashedFetchAllOperationExecutorTest {
 
     @MockK
     private lateinit var dtoToEntityMapper: Mapper<List<Model.Dto>, List<Model.Entity>>
@@ -35,12 +35,12 @@ internal class CashedFetchOperationExecutorTest {
     @MockK
     private lateinit var logger: Logger
 
-    private lateinit var cashedFetchOperationExecutor: CashedFetchOperationExecutor<Model.Dto, Model.Entity, Model.Data>
+    private lateinit var cashedFetchAllOperationExecutor: CashedFetchAllOperationExecutor<Model.Dto, Model.Entity, Model.Data>
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        cashedFetchOperationExecutor = CashedFetchOperationExecutor(
+        cashedFetchAllOperationExecutor = CashedFetchAllOperationExecutor(
             updateDao = updateDao,
             queryDao = queryDao,
             dtoToEntityMapper = dtoToEntityMapper,
@@ -60,7 +60,7 @@ internal class CashedFetchOperationExecutorTest {
             coEvery { queryDao.getAll() } throws Exception()
 
             // When
-            val response = cashedFetchOperationExecutor.execute(apiOperation)
+            val response = cashedFetchAllOperationExecutor.execute(apiOperation)
 
             // Then
             assert(response is OperationResult.Failure)
@@ -85,7 +85,7 @@ internal class CashedFetchOperationExecutorTest {
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
-            val response = cashedFetchOperationExecutor.execute(apiOperation)
+            val response = cashedFetchAllOperationExecutor.execute(apiOperation)
 
             // Then
             assertEquals(
@@ -116,7 +116,7 @@ internal class CashedFetchOperationExecutorTest {
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
-            val response = cashedFetchOperationExecutor.execute(apiOperation)
+            val response = cashedFetchAllOperationExecutor.execute(apiOperation)
 
             // Then
             assertEquals(
@@ -146,7 +146,7 @@ internal class CashedFetchOperationExecutorTest {
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
-            val response = cashedFetchOperationExecutor.execute(apiOperation)
+            val response = cashedFetchAllOperationExecutor.execute(apiOperation)
 
             // Then
             assertEquals(
@@ -177,7 +177,7 @@ internal class CashedFetchOperationExecutorTest {
             val expectedResponse = OperationResult.Success(expectedData)
 
             // When
-            val response = cashedFetchOperationExecutor.execute(apiOperation)
+            val response = cashedFetchAllOperationExecutor.execute(apiOperation)
 
             // Then
             assertEquals(

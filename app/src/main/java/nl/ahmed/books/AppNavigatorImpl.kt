@@ -27,7 +27,10 @@ internal class AppNavigatorImpl @Inject constructor(
     }
 
     override fun navigateToDetails(bookId: String, clearBackStack: Boolean) {
-        TODO("Not yet implemented")
+        navController.navigate(
+            directions = NavGraphDirections.actionDetails(bookId),
+            navOptions = getNavOptions(clearBackStack)
+        )
     }
 
     override fun navigateUp(): Boolean {
@@ -43,6 +46,11 @@ internal class AppNavigatorImpl @Inject constructor(
         if (clearBackStack) {
             navOptionsBuilder.setPopUpTo(R.id.nav_graph, inclusive = true)
         }
-        return navOptionsBuilder.build()
+        return navOptionsBuilder
+            .setEnterAnim(R.anim.slide_in_bottom)
+            .setExitAnim(R.anim.slide_out_bottom)
+            .setPopEnterAnim(R.anim.slide_in_bottom)
+            .setPopExitAnim(R.anim.slide_out_bottom)
+            .build()
     }
 }

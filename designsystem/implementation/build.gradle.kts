@@ -19,7 +19,7 @@ dependencies {
     api(project(":designsystem:api"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.coil)
+    api(libs.coil)
 
     // Compose
     api(platform(libs.androidx.compose.bom))

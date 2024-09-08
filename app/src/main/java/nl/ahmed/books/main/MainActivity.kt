@@ -1,11 +1,16 @@
 package nl.ahmed.books.main
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import nl.ahmed.books.App
 import nl.ahmed.books.R
 import nl.ahmed.books.databinding.ActivityMainBinding
@@ -35,6 +40,12 @@ internal class MainActivity : DaggerNavigatorOwnerActivity<MainNavigator>(), App
     override fun onCreate(savedInstanceState: Bundle?) {
         setupSplashScreenDuration()
         super.onCreate(savedInstanceState)
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.statusBars())
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         enableEdgeToEdge()
         setContentView(binding.root)
         setupBottomNavigationBar()

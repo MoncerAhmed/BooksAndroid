@@ -42,5 +42,9 @@ abstract class MviDaggerFragment<SS: ScreenState, I: Intent, SE: SideEffect, N: 
         }
     }
 
+    protected fun handleIntent(intent: I) {
+        viewModel.internalHandleIntent(intent)
+    }
+
     abstract fun injectFragment()
 }

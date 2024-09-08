@@ -28,6 +28,10 @@ internal interface BooksDaoImpl : BooksDao {
         updateBooksAndFavorites(items as List<BookEntityImpl>)
     }
 
+    override suspend fun update(item: BookEntity) {
+        _insert(book = item as BookEntityImpl)
+    }
+
     @Suppress("UNCHECKED_CAST")
     override suspend fun delete(vararg items: BookEntity) {
         _delete(*(items as Array<out BookEntityImpl>))
@@ -59,6 +63,9 @@ internal interface BooksDaoImpl : BooksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun _insert(books: List<BookEntityImpl>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun _insert(book: BookEntityImpl)
 
     @Delete
     suspend fun _delete(vararg books: BookEntityImpl)

@@ -39,7 +39,7 @@ internal class FavoritesViewModel @Inject constructor(
     }
 
     private suspend fun handleItemClickIntent(intent: FavoritesIntent.ItemClick) {
-        emitSideEffect(FavoritesSideEffect.NavigateToDetails(intent.bookCardViewState))
+        emitSideEffect(FavoritesSideEffect.NavigateToDetails(intent.bookCardViewState.id))
     }
 
     private suspend fun handleFavoriteButtonClickIntent(intent: FavoritesIntent.FavoriteButtonClick) {

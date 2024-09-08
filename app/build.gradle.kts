@@ -45,6 +45,7 @@ dependencies {
 
     implementation(project(":features:home:shared"))
     implementation(project(":features:favorites:shared"))
+    implementation(project(":features:details:shared"))
 
     // Dagger
     implementation(libs.bundles.dagger)

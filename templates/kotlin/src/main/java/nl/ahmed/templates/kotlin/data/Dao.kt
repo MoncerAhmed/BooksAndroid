@@ -18,5 +18,6 @@ sealed interface Dao {
 
     interface Update<E: Model.Entity> : Dao {
         suspend fun updateAll(items: List<E>)
+        suspend fun update(item: E)
     }
 }

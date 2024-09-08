@@ -35,7 +35,7 @@ abstract class MviViewModel<SS: ScreenState, I: Intent, SE: SideEffect>(
         _sideEffect.send(sideEffect)
     }
 
-    protected suspend fun updateScreenState(reducer: (SS) -> SS) {
+    protected suspend fun updateScreenState(reducer: suspend (SS) -> SS) {
         _screenState.emit(reducer(screenState.value))
     }
 
@@ -43,9 +43,15 @@ abstract class MviViewModel<SS: ScreenState, I: Intent, SE: SideEffect>(
         updateScreenState { screenState }
     }
 
-    protected suspend inline fun <reified S: SS> updateScreenStateIfCurrentIs(crossinline reducer: (S) -> SS) {
+    protected suspend inline fun <reified S: SS> updateScreenStateIfCurrentIs(crossinline reducer: suspend (S) -> SS) {
         (currentScreenState as? S)?.let { currentSState ->
             updateScreenState { reducer(currentSState) }
+        }
+    }
+
+    protected suspend inline fun <reified S: SS> doIfCurrentScreenStateIs(crossinline block: suspend (S) -> Unit) {
+        (currentScreenState as? S)?.let { currentSState ->
+            block(currentSState)
         }
     }
 
