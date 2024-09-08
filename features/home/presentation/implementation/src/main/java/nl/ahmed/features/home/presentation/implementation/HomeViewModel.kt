@@ -2,19 +2,14 @@ package nl.ahmed.features.home.presentation.implementation
 
 import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
-import javax.inject.Named
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import nl.ahmed.common.kotlin.di.FragmentScope
 import nl.ahmed.common.kotlin.operation.doIfSuccessful
 import nl.ahmed.common.kotlin.operation.models.OperationResult
-import nl.ahmed.features.home.domain.api.DependencyQualifiers
 import nl.ahmed.features.home.domain.api.models.HomeBook
 import nl.ahmed.features.home.presentation.api.HomeIntent
 import nl.ahmed.features.home.presentation.api.HomeScreenState
@@ -27,10 +22,6 @@ import nl.ahmed.templates.kotlin.domain.UseCase
 @FragmentScope
 internal class HomeViewModel @Inject constructor(
     private val getHomeBooksUseCase: UseCase<String, OperationResult<List<HomeBook>>>,
-    @Named(DependencyQualifiers.ADD_FAVORITE_USE_CASE)
-    private val addFavoriteUseCase: UseCase<HomeBook.Id, OperationResult<Unit>>,
-    @Named(DependencyQualifiers.REMOVE_FAVORITE_USE_CASE)
-    private val removeFavoriteUseCase: UseCase<HomeBook.Id, OperationResult<Unit>>,
     private val bookDomainToViewStateMapper: BookDomainToViewStateMapper
 ) : MviViewModel<HomeScreenState, HomeIntent, HomeSideEffect>(
     initialScreenState = HomeScreenState.Loading(searchKeyword = "")
@@ -55,7 +46,6 @@ internal class HomeViewModel @Inject constructor(
             is HomeIntent.ItemClick -> handleItemClickIntent(intent)
             is HomeIntent.SearchKeywordChange -> handleSearchKeywordChangeIntent(intent)
             is HomeIntent.ClearSearchKeyword -> handleClearSearchKeywordIntent()
-            is HomeIntent.FavoriteButtonClick -> handleFavoriteButtonClickIntent(intent)
         }
     }
 
@@ -79,32 +69,6 @@ internal class HomeViewModel @Inject constructor(
             it.copyWithSearchKeyword("")
         }
         searchKeywordFlow.emit("")
-    }
-
-    private suspend fun handleFavoriteButtonClickIntent(intent: HomeIntent.FavoriteButtonClick) {
-        val id = HomeBook.Id(intent.bookCardViewState.id)
-
-        suspend fun updateFavoriteItem(isFavorite: Boolean) {
-            updateScreenStateIfCurrentIs<HomeScreenState.Loaded> {
-                it.copy(
-                    bookCardsViewStates = it.bookCardsViewStates.toMutableList().apply {
-                        set(
-                            indexOf(intent.bookCardViewState),
-                            intent.bookCardViewState.copy(isFavorite = isFavorite)
-                        )
-                    }
-                )
-            }
-        }
-
-        val operationResult = if(intent.bookCardViewState.isFavorite) {
-            updateFavoriteItem(false)
-            removeFavoriteUseCase(id)
-        } else {
-            updateFavoriteItem(true)
-            addFavoriteUseCase(id)
-        }
-        operationResult.doIfSuccessful { loadBooks(withLoading = false) }
     }
 
     private suspend fun loadBooks(withLoading: Boolean = true) {

@@ -28,15 +28,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import nl.ahmed.designsystem.R
 import nl.ahmed.designsystem.api.models.BookCardViewState
 import nl.ahmed.designsystem.theme.BooksTheme
-import nl.ahmed.designsystem.utils.rememberAsyncImageNonCacheablePainter
 
 @Composable
 fun BookCard(
     bookCardViewState: BookCardViewState,
-    onFavoriteButtonClick: (BookCardViewState) -> Unit,
+    onFavoriteButtonClick: ((BookCardViewState) -> Unit)?,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -48,7 +48,7 @@ fun BookCard(
         ) {
             Box {
                 Image(
-                    painter = rememberAsyncImageNonCacheablePainter(model = bookCardViewState.coverUrl),
+                    painter = rememberAsyncImagePainter(model = bookCardViewState.coverUrl),
                     contentDescription = "",
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
@@ -64,10 +64,9 @@ fun BookCard(
                     BookTitleSection(
                         title = bookCardViewState.title,
                         author = bookCardViewState.author,
-                        isFavorite = bookCardViewState.isFavorite
-                    ) {
-                        onFavoriteButtonClick(bookCardViewState)
-                    }
+                        isFavorite = bookCardViewState.isFavorite,
+                        onFavoriteButtonClick = onFavoriteButtonClick?.let { { onFavoriteButtonClick(bookCardViewState) } }
+                    )
                     Spacer(modifier = Modifier.height(2.dp))
                     BookReadsAndReviewsSection(
                         reads = bookCardViewState.reads,
@@ -85,7 +84,7 @@ fun BookTitleSection(
     author: String,
     isFavorite: Boolean,
     contentPadding: PaddingValues = PaddingValues(start = 0.dp, top = 12.dp, end = 0.dp, bottom = 0.dp),
-    onFavoriteButtonClick: () -> Unit
+    onFavoriteButtonClick: (() -> Unit)?
 ) {
     Row {
         Column(
@@ -119,19 +118,21 @@ fun BookTitleSection(
                 )
             }
         }
-        val favoriteIconId = if (isFavorite)
-            R.drawable.ic_favorite
-        else
-            R.drawable.ic_not_favorite
-        Image(
-            painter = painterResource(id = favoriteIconId),
-            contentDescription = "",
-            modifier = Modifier
-                .size(32.dp)
-                .clickable {
-                    onFavoriteButtonClick()
-                }
-        )
+        onFavoriteButtonClick?.let {
+            val favoriteIconId = if (isFavorite)
+                R.drawable.ic_favorite
+            else
+                R.drawable.ic_not_favorite
+            Image(
+                painter = painterResource(id = favoriteIconId),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable {
+                        onFavoriteButtonClick()
+                    }
+            )
+        }
     }
 }
 

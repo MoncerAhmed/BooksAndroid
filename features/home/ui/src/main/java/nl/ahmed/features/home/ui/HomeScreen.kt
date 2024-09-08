@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -30,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import javax.inject.Inject
 import nl.ahmed.common.kotlin.di.FragmentScope
@@ -42,7 +42,8 @@ import nl.ahmed.features.home.presentation.api.HomeSideEffect
 import nl.ahmed.templates.android.BaseComposeScreen
 
 @FragmentScope
-internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenState, HomeIntent, HomeSideEffect, HomeNavigator>() {
+internal class HomeScreen @Inject constructor() :
+    BaseComposeScreen<HomeScreenState, HomeIntent, HomeSideEffect, HomeNavigator>() {
     @Composable
     override fun Screen(screenState: HomeScreenState, intentExecutor: (HomeIntent) -> Unit) {
         BooksTheme {
@@ -50,7 +51,6 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
                 HomeScreen(
                     screenState = screenState,
                     onItemClick = { intentExecutor(HomeIntent.ItemClick(it)) },
-                    onFavoriteButtonClick = { intentExecutor(HomeIntent.FavoriteButtonClick(it)) },
                     onSearchKeywordChange = { intentExecutor(HomeIntent.SearchKeywordChange(it)) },
                     onClearSearchKeyword = { intentExecutor(HomeIntent.ClearSearchKeyword) }
                 )
@@ -59,7 +59,7 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
     }
 
     context(PerformSideEffectScope) override suspend fun performSideEffect(sideEffect: HomeSideEffect) {
-        when(sideEffect) {
+        when (sideEffect) {
             is HomeSideEffect.NavigateToDetails -> navigator.navigateToDetails(sideEffect.bookId)
         }
     }
@@ -70,14 +70,21 @@ internal class HomeScreen @Inject constructor() : BaseComposeScreen<HomeScreenSt
 private fun HomeScreen(
     screenState: HomeScreenState,
     onItemClick: (BookCardViewState) -> Unit,
-    onFavoriteButtonClick: (BookCardViewState) -> Unit,
     onSearchKeywordChange: (String) -> Unit,
     onClearSearchKeyword: () -> Unit
 ) {
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth().padding(top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding())) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = WindowInsets.safeDrawing
+                            .asPaddingValues()
+                            .calculateTopPadding()
+                    )
+            ) {
                 SearchBar(
                     query = screenState.searchKeyword,
                     onQueryChange = onSearchKeywordChange,
@@ -86,8 +93,11 @@ private fun HomeScreen(
                     onActiveChange = {},
                     content = {},
                     trailingIcon = {
-                        if(screenState.searchKeyword.isEmpty()) {
-                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search icon")
+                        if (screenState.searchKeyword.isEmpty()) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search icon"
+                            )
                         } else {
                             Icon(
                                 imageVector = Icons.Default.Close,
@@ -105,13 +115,12 @@ private fun HomeScreen(
         }
     ) { contentPadding ->
         Surface(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
-            when(screenState) {
+            when (screenState) {
                 is HomeScreenState.Loading -> LoadingHomeScreen()
                 is HomeScreenState.Empty -> EmptyHomeScreen()
                 is HomeScreenState.Loaded -> LoadedHomeScreenContent(
                     screenState = screenState,
-                    onItemClick = onItemClick,
-                    onFavoriteButtonClick = onFavoriteButtonClick
+                    onItemClick = onItemClick
                 )
             }
         }
@@ -145,8 +154,7 @@ private fun EmptyHomeScreen() {
 @Composable
 private fun LoadedHomeScreenContent(
     screenState: HomeScreenState.Loaded,
-    onItemClick: (BookCardViewState) -> Unit,
-    onFavoriteButtonClick: (BookCardViewState) -> Unit
+    onItemClick: (BookCardViewState) -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -155,8 +163,8 @@ private fun LoadedHomeScreenContent(
         items(screenState.bookCardsViewStates) {
             BookCard(
                 bookCardViewState = it,
-                modifier = Modifier.clickable { onItemClick(it) },
-                onFavoriteButtonClick = onFavoriteButtonClick
+                onFavoriteButtonClick = null,
+                modifier = Modifier.clickable { onItemClick(it) }
             )
         }
     }
@@ -164,8 +172,16 @@ private fun LoadedHomeScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun GreetingPreview() {
+private fun HomeLoadedScreenPreview(
+    @PreviewParameter(provider = HomeScreenPreviewParameterProvider::class)
+    homeScreenState: HomeScreenState
+) {
     BooksTheme {
-        // Greeting("Android")
+        HomeScreen(
+            screenState = homeScreenState,
+            onItemClick = {},
+            onSearchKeywordChange = {},
+            onClearSearchKeyword = {}
+        )
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -40,15 +41,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import coil.compose.rememberAsyncImagePainter
 import javax.inject.Inject
 import nl.ahmed.common.kotlin.di.FragmentScope
 import nl.ahmed.designsystem.composables.book.BookReadsAndReviewsSection
 import nl.ahmed.designsystem.composables.book.BookTitleSection
 import nl.ahmed.designsystem.theme.BooksTheme
-import nl.ahmed.designsystem.utils.rememberAsyncImageNonCacheablePainter
 import nl.ahmed.features.details.presentation.api.DetailsIntent
 import nl.ahmed.features.details.presentation.api.DetailsScreenState
 import nl.ahmed.features.details.presentation.api.DetailsSideEffect
@@ -60,7 +62,7 @@ internal class DetailsScreen @Inject constructor() :
     @Composable
     override fun Screen(screenState: DetailsScreenState, intentExecutor: (DetailsIntent) -> Unit) {
         BooksTheme {
-            Surface {
+            Surface(modifier = Modifier.fillMaxSize()) {
                 DetailsScreen(
                     screenState = screenState,
                     onFavoriteButtonClick = { intentExecutor(DetailsIntent.FavoriteButtonClick) },
@@ -83,7 +85,7 @@ private fun DetailsScreen(
     onFavoriteButtonClick: () -> Unit,
     onBackButtonClick: () -> Unit
 ) {
-    Surface {
+    Surface(modifier = Modifier.fillMaxSize()) {
         when (screenState) {
             is DetailsScreenState.Loading -> LoadingDetailsScreen()
             is DetailsScreenState.Loaded -> LoadedDetailsScreenContent(
@@ -123,6 +125,7 @@ private fun LoadedDetailsScreenContent(
     onBackButtonClick: () -> Unit
 ) {
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets.navigationBars,
         topBar = {
             Box {
@@ -130,7 +133,6 @@ private fun LoadedDetailsScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        // .background(Color.Red)
                         .background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
@@ -175,10 +177,10 @@ private fun LoadedDetailsScreenContent(
             }
         }
     ) {
-        BoxWithConstraints {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val coverHeight = this.maxWidth * 0.8f
             Image(
-                painter = rememberAsyncImageNonCacheablePainter(screenState.coverUrl),
+                painter = rememberAsyncImagePainter(screenState.coverUrl),
                 modifier = Modifier
                     .width(this.maxWidth)
                     .height(coverHeight)
@@ -193,7 +195,10 @@ private fun LoadedDetailsScreenContent(
             ) {
                 Card(
                     shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-                    modifier = Modifier.fillMaxSize().padding(top = coverHeight - 20.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .heightIn(min = this@BoxWithConstraints.maxHeight)
+                        .padding(top = coverHeight - 20.dp),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 3.dp
                     )
@@ -210,20 +215,34 @@ private fun LoadedDetailsScreenContent(
                             contentPadding = PaddingValues(top = 24.dp),
                             onFavoriteButtonClick = onFavoriteButtonClick
                         )
-                        BookReadsAndReviewsSection(reads = screenState.reads, reviews = screenState.reviews)
-                        Column(modifier = Modifier.padding(top = 24.dp)) {
-                            Text(text = "Description", style = MaterialTheme.typography.titleMedium)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(text = screenState.description, style = MaterialTheme.typography.bodySmall)
-                            Spacer(modifier = Modifier.height(24.dp))
-                            Text(text = "Summary", style = MaterialTheme.typography.titleMedium)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(text = screenState.summary, style = MaterialTheme.typography.bodySmall)
-                        }
+                        BookReadsAndReviewsSection(
+                            reads = screenState.reads,
+                            reviews = screenState.reviews
+                        )
+                        DetailsSection(
+                            description = screenState.description,
+                            summary = screenState.summary
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DetailsSection(
+    description: String,
+    summary: String
+) {
+    Column(modifier = Modifier.padding(top = 24.dp)) {
+        Text(text = stringResource(id = R.string.details_description_label), style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = description, style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(text = stringResource(id = R.string.details_summary_label), style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = summary, style = MaterialTheme.typography.bodySmall)
     }
 }
 

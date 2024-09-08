@@ -11,6 +11,4 @@ sealed interface HomeIntent : Intent {
     data class SearchKeywordChange(val newKeyword: String) : HomeIntent
 
     data object ClearSearchKeyword : HomeIntent
-
-    data class FavoriteButtonClick(val bookCardViewState: BookCardViewState) :HomeIntent
 }

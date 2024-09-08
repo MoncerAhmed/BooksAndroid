@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="favorite_empty_label">Sorry that you wasn\'t able to find any favorite book here!</string>
+    <string name="details_description_label">Description</string>
+    <string name="details_summary_label">Summary</string>
 </resources>

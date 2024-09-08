@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,21 +21,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import javax.inject.Inject
 import nl.ahmed.common.kotlin.di.FragmentScope
 import nl.ahmed.designsystem.api.models.BookCardViewState
 import nl.ahmed.designsystem.composables.book.BookCard
 import nl.ahmed.designsystem.theme.BooksTheme
+import nl.ahmed.features.favorites.FavoritesPreviewParameterProvider
 import nl.ahmed.features.favorites.presentation.api.FavoritesIntent
 import nl.ahmed.features.favorites.presentation.api.FavoritesScreenState
 import nl.ahmed.features.favorites.presentation.api.FavoritesSideEffect
 import nl.ahmed.templates.android.BaseComposeScreen
 
 @FragmentScope
-internal class FavoritesScreen @Inject constructor() : BaseComposeScreen<FavoritesScreenState, FavoritesIntent, FavoritesSideEffect, FavoritesNavigator>() {
+internal class FavoritesScreen @Inject constructor() :
+    BaseComposeScreen<FavoritesScreenState, FavoritesIntent, FavoritesSideEffect, FavoritesNavigator>() {
     @Composable
-    override fun Screen(screenState: FavoritesScreenState, intentExecutor: (FavoritesIntent) -> Unit) {
+    override fun Screen(
+        screenState: FavoritesScreenState,
+        intentExecutor: (FavoritesIntent) -> Unit
+    ) {
         BooksTheme {
             Surface {
                 FavoritesScreen(
@@ -50,7 +54,7 @@ internal class FavoritesScreen @Inject constructor() : BaseComposeScreen<Favorit
     }
 
     context(PerformSideEffectScope) override suspend fun performSideEffect(sideEffect: FavoritesSideEffect) {
-        when(sideEffect) {
+        when (sideEffect) {
             is FavoritesSideEffect.NavigateToDetails -> navigator.navigateToDetails(sideEffect.bookId)
         }
     }
@@ -62,8 +66,12 @@ private fun FavoritesScreen(
     onItemClick: (BookCardViewState) -> Unit,
     onFavoriteButtonClick: (BookCardViewState) -> Unit
 ) {
-    Surface(modifier = Modifier.padding(top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding())) {
-        when(screenState) {
+    Surface(
+        modifier = Modifier.padding(
+            top = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding()
+        )
+    ) {
+        when (screenState) {
             is FavoritesScreenState.Loading -> LoadingFavoritesScreen()
             is FavoritesScreenState.Empty -> EmptyFavoritesScreen()
             is FavoritesScreenState.Loaded -> LoadedFavoritesScreenContent(
@@ -123,8 +131,15 @@ private fun LoadedFavoritesScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun GreetingPreview() {
+private fun FavoritesLoadedScreenPreviews(
+    @PreviewParameter(provider = FavoritesPreviewParameterProvider::class)
+    favoritesScreenState: FavoritesScreenState
+) {
     BooksTheme {
-        // Greeting("Android")
+        FavoritesScreen(
+            screenState = favoritesScreenState,
+            onItemClick = { },
+            onFavoriteButtonClick = { }
+        )
     }
 }

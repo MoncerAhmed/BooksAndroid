@@ -29,6 +29,7 @@ coil = "2.7.0"
 uiTooling = "1.7.0"
 viewmodelLifecycle = "2.8.5"
 fragmentKtx = "1.8.3"
+gradleGraphGenerator = "0.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,6 +83,7 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 navigation-safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref="navigation" }
+gradle-graphGenerator = { id = "com.vanniktech.dependency.graph.generator", version.ref="gradleGraphGenerator" }
 
 [bundles]
 dagger = ["dagger-dagger", "dagger-androidSupport"]
